@@ -1,5 +1,5 @@
-*.py linguist-detectable=true
-*.js linguist-detectable=false
-*.css linguist-detectable=false
-*.html linguist-detectable=false
-*.sql linguist-detectable=false
+*.py linguist-detectable=1
+*.js linguist-detectable=1
+*.css linguist-detectable=1
+*.html linguist-detectable=1
+*.sql linguist-detectable=1

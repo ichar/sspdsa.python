@@ -1,5 +1,5 @@
 *.py linguist-detectable=1
-*.js linguist-detectable=1
+*.js linguist-detectable=0
 *.css linguist-detectable=1
 *.html linguist-detectable=1
 *.sql linguist-detectable=1

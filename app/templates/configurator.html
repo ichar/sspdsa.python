@@ -1,0 +1,146 @@
+﻿{% extends "common.html" %}
+
+{% import 'forms.html' as Forms %}
+
+{% block page_styles %}
+
+<link href="{{ url_for('static', filename='css/style') }}.configurator.css{{ vsc }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block starter %}
+
+<script src="{{ url_for('static', filename='js/db.controller.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/log.default.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/configurator.dialogs.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/configurator.js') }}{{ vsc }}"></script>
+
+<script src="{{ url_for('static', filename='js/configurator.default.js') }}{{ vsc }}"></script>
+
+<script type="text/javascript">
+
+is_full_container = {{ is_full_container }};
+is_no_line_open = {{ is_no_line_open }};
+
+</script> 
+
+{% endblock %}
+
+{% block header_styles %}
+
+<style type="text/css">
+
+#pageCaption { width:420px; }
+
+</style>
+
+{% endblock %}
+
+{% block data_section_title %}
+
+  <div class="data-title"><h2>{{ data_title }}</h2></div>
+
+{% endblock %}
+
+{% block data_section_content %}
+
+  <div class="container view-container">
+      <div class="col-30">
+        <div class="panel panel_default">
+          <div class="panel_heading"><h3 class="panel_title">{{ g.maketext('Config Parameters') }}:</h3></div>
+          <div class="panel_body">
+              <textarea class="string" id="config_content" name="{{ current_file['name'] }}" 
+                {{ current_file['disabled'] }}>{{ current_file['value']|safe }}</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-30">
+        <div class="panel panel_default" id="{{ group }}">
+          <div class="panel_heading"><h3 class="panel_title">{{ g.maketext('Changes') }}:</h3></div>
+          <div class="panel_body">
+            <div class="{{ group }}">
+
+              {{ Forms.tablines(group, rows, config) }}
+
+            </div>
+            <div class="view-bottom">
+              <div class="paging">
+
+                {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-30">
+        <div class="panel panel_default">
+          <div class="panel_heading"><h3 class="panel_title">{{ g.maketext('Before') }}:</h3></div>
+          <div class="panel_body">
+            <div class="change"><div id="changes_before"></div></div>
+          </div>
+        </div>
+        <div class="panel panel_default">
+          <div class="panel_heading"><h3 class="panel_title">{{ g.maketext('After') }}:</h3></div>
+          <div class="panel_body">
+            <div class="change"><div id="changes_after"></div></div>
+          </div>
+        </div>
+      </div>
+
+    <div class="view-data-buttons" id="refer_form_buttons">
+        <button class="btn btn-danger disabled" id="page_save" disabled>{{ g.maketext('Save') }}</button>
+        <button class="btn btn-primary disabled hidden" id="page_restore" disabled>{{ g.maketext('Restore') }}</button>
+    </div>
+
+    <div class="panel_footer {{ messages_hidden }}" id="messages_container">
+      <div class="panel_heading"><h3 class="panel_title">{{ g.maketext('Messages') }}:</h3></div>
+      <div class="messages" id="messages_content">
+        {% for msg in messages %}
+          <p>{{ msg|safe }}</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block info_section_content %}
+
+{% endblock %}
+
+{% block filter %}
+
+  <div id="log-filter" class="configurator-filter common-filter">
+    <div id="sidebar-filter-scroller">
+    <form action="{{ pagination['action'] }}" id="filter-form" method="POST">
+    
+    <input type="hidden" name="page" value="{{ pagination['current_page'] }}">
+    <input type="hidden" name="per-page" value="{{ pagination['per_page'] }}">
+    <input type="hidden" id="searched" name="search" value="{{ search }}">
+    <input type="hidden" id="reset_search" name="reset_search" value="0">
+    <input type="hidden" id="sort" name="sort" value="{{ pagination['sort']['current_sort'] }}">
+    <input type="hidden" id="position" name="position" value="{{ pagination['position'] }}">
+    <input type="hidden" id="sidebar" name="sidebar" value="{{ sidebar['state'] }}">
+    <input type="hidden" id="selected_date" name="selected_date" value="{{ selected_date }}">
+    <input type="hidden" id="errors" value="{{ errors }}">
+    <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+    <input type="hidden" id="command" name="command" value="">
+    {% if 'extra' in pagination %}<input type="hidden" name="__" value="1">{% endif %}
+
+    </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block control_panel %}
+
+{% endblock %}
+
+{% block dialogs_content %}
+
+{% endblock %}
+

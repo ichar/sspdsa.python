@@ -1,0 +1,265 @@
+{% from 'templates.html' import render_field, render_navigation_item, render_navigation_link %}
+
+{% macro form(name, group, data, config, root) -%}
+
+{%- if name=='register' -%}
+
+<form action="register" id="register-form" method="POST" onSubmit="return $onRegisterFormSubmit(this);">
+
+  <dl>
+    {{ render_field(data.username) }}
+    {{ render_field(data.email) }}
+    {{ render_field(data.password) }}
+    {{ render_field(data.confirm) }}
+    {{ render_field(data.accept_tos) }}
+  </dl>
+  <p><input type="submit" value="Register">
+
+</form>
+
+{%- elif name=='admin' -%}
+
+  {%- if group=='user' -%}
+
+  <dl>
+    {{ render_field(data.login) }}
+    {{ render_field(data.password) }}
+    {{ render_field(data.family_name) }}
+    {{ render_field(data.first_name) }}
+    {{ render_field(data.last_name) }}
+    {{ render_field(data.post) }}
+    {{ render_field(data.email) }}
+    {{ render_field(data.role) }}
+    {{ render_field(data.confirmed) }}
+    {{ render_field(data.enabled) }}
+  </dl>
+
+  {%- endif -%}
+
+{%- elif name=='navigation' -%}
+
+  {%- if group=='home' -%}
+
+  <ul>
+    {%- for item in data %}
+      {{ render_navigation_item(item) }} {% if not loop.last %} <span class="separator">&nbsp;</span> {% endif %}
+    {%- endfor %}
+  </ul>
+
+  {%- endif -%}
+
+{%- elif name=='default' -%}
+
+  {%- if group=='home' -%}
+
+  <div class="navigation">
+    {%- for item in data %}
+      {{ render_navigation_link(item) }}
+    {%- endfor %}
+  </div>
+
+  {%- endif -%}
+
+{%- endif -%}
+
+{%- endmacro %}
+
+{% macro lines(group, data, config) -%}
+
+  <div class="view-container" id="line-content">
+    <table class="view-data boxShadow1 {{ group }}" id="line-table" border="1">
+    <thead>
+    <tr>
+    {%- for column in config[group]['columns'] -%}
+      <td class="column header">{{ config[group]['headers'][column][0]|safe }}</td>
+    {%- endfor -%}
+    </tr>
+    </thead>
+
+    {% for row in data -%}
+    <tr class="line {{ loop.cycle('odd', 'even') }} {{ row['selected'] }}" id="row-line:{{ row['id'] }}:{{ loop.index }}">
+      {%- for column in config[group]['columns'] -%}
+        {%- set css = config[group]['headers'][column][1] + column.lower() -%}
+        {% if row['Error'] %}
+      <td class="column error {{ css }}">{{ row[column]|safe }}</td>
+        {% elif row['Warning'] %}
+      <td class="column warning {{ css }}">{{ row[column]|safe }}</td>
+        {% elif row['Ready'] %}
+      <td class="column ready">{{ row[column]|safe }}</td>
+        {% elif row['Stop'] %}
+      <td class="column stop">{{ row[column]|safe }}</td>
+        {% elif row['Wait'] %}
+      <td class="column wait">{{ row[column]|safe }}</td>
+        {% elif row['Archive'] %}
+      <td class="column archive">{{ row[column]|safe }}</td>
+        {% else %}
+      <td class="column {{ css }}">{{ row[column]|safe }}</td>
+        {% endif %}
+      {%- endfor -%}
+    </tr>
+    {%- endfor %}
+    {%- if not data -%}
+    <tr><td colspan="{{ config[group]['columns']|length }}"><div class="nodata">{{ _('No data') }}</div></td></tr>
+    {%- endif -%}
+    </table>
+  </div>
+
+{%- endmacro %}
+
+{% macro sublines(group, data, config) -%}
+
+  <div class="view-container inline p100" id="MAINDATA"> <!-- {{ view_class }} -->
+    <table class="view-data p100" border="1">
+    <thead>
+    <tr>
+    {%- for column in config[group]['columns'] -%}
+      <td class="column header {{ column }}">{{ config[group]['headers'][column] }}</td>
+    {%- endfor -%}
+    </tr>
+    </thead>
+
+    {% for row in data -%}
+    <tr class="subline {{ loop.cycle('odd', 'even') }} {{ row['selected'] }}" id="row-subline:{{ row['id'] }}:{{ loop.index }}">
+      {%- for column in config[group]['columns'] -%}
+        {%- set css = 'log-' + column.lower() -%}
+        {% if row['Found'] and column in ('TZ',) %}
+      <td class="column {{ css }} found">{{ row[column]|safe }}</td>
+        {% elif row['Ready'] %}
+      <td class="column {{ css }} ready">{{ row[column]|safe }}</td>
+        {% elif row['Error'] %}
+      <td class="column {{ css }} error">{{ row[column]|safe }}</td>
+        {% else %}
+      <td class="column {{ css }}">{{ row[column]|safe }}</td>
+        {% endif %}
+      {%- endfor -%}
+    </tr>
+    {%- endfor %}
+    {%- if not data -%}
+    <tr id="subline-no-data"><td colspan="{{ config[group]['columns']|length }}"><div class="nodata">{{ _('No data') }}</div></td></tr>
+    {%- endif -%}
+    </table>
+    {# if data #}
+    <div class="row-counting">{{ _('Total records') }}: <span id="tab-rows-total">{{ data|length }}</span></div>
+    {# endif #}
+  </div>
+
+{%- endmacro %}
+
+{% macro pagination(pagination, total_selected) -%}
+
+    <div id="log-pagination">
+      <table border="0">
+      <form action="{{ pagination['link'] }}" id="pagination-form" method="GET" onSubmit="return $onPaginationFormSubmit(this);">
+      <input type="hidden" name="sidebar" value="" />
+
+      {% block pagination_form %}{% endblock %}
+
+      <tr class="pagination-pages">
+        <td>
+          <div class="caption total_rows">{% block pagination_title %}{% endblock %}:<div class="total" title="{{ pagination['title'] }}">{{ pagination['total'] }} / <span id="total_selected_row" title="{{ _('Total selected') }}">{{ total_selected.split('|')[1] }}</span></div></div>
+        </td>
+        <td>
+          <div id="log-page">
+            <dl>
+              <dd id="page:prev" class="pagination auto prev">
+                <a class="page nav {% if pagination['has_prev'] %}enabled{% else %}disabled{% endif %}" href="{{ pagination['link'] }}&page={{ pagination['current_page'] }}&prev=1" title="Назад"> << </a>
+              </dd>
+              <dd id="page:next" class="pagination auto next">
+                <a class="page nav {% if pagination['has_next'] %}enabled{% else %}disabled{% endif %}" href="{{ pagination['link'] }}&page={{ pagination['current_page'] }}&next=1" title="Вперед"> >> </a>
+              </dd>
+              {% for p in pagination['iter_pages'] %}
+                {%- if p == -1 -%}
+              <dd class="pagination spaced disabled">...</dd>
+                {%- else -%}
+              <dd id="page:{{ p }}" class="pagination valid enabled {% if p == pagination['current_page'] %}selected{% endif %}">
+                <a class="page" href="{{ pagination['link'] }}&page={{ p }}">{{ p }}</a>
+              </dd>
+                {%- endif -%}
+              {% endfor -%}
+            </dl>
+          </div>
+        </td>
+        <td>
+          <div id="log-per-page">
+            <div class="caption per_page">{{ _('Page records') }}:</div>
+            <select class="popup" id="per-page" name="per_page" onchange="javascript:$SidebarControl.submit(this.form);">
+            {% for o in pagination['per_page_options'] -%}
+              <option value="{{ o }}" {% if pagination['per_page'] == o %}selected{% endif %}>{{ o }}</option>
+            {%- endfor %}
+            </select>
+          </div>
+        </td>
+
+        {% if pagination['sort']['modes'] %}
+        <td>
+          <div id="log-sortbox">
+            <div class="caption sortbox">{{ _('Order by') }}:</div>
+            <select class="popup" name="sort" onchange="javascript:$SidebarControl.submit(this.form);">
+            {% for value, name in pagination['sort']['modes'] -%}
+              <option value="{{ value }}" {% if pagination['sort']['current_sort'] == value %}selected{% endif %}>{{ name|safe }}</option>
+            {%- endfor -%}
+            </select>
+          </div>
+        </td>
+        {% endif %}
+
+        {% block pagination_icons %}{% endblock %}
+      </tr>
+
+      {% if pagination['today'] %}
+      <tr>
+        <td colspan="10">
+          <div class="pagination-today">
+            <div class="caption today">Текущий день:</div>
+            <div id="log-today">
+              <dl>
+                <dd id="yesterday" class="pagination">
+                  <a class="page nav {% if pagination['today']['has_prev'] %}enabled{% else %}disabled{% endif %}" href="{{ pagination['link'] }}&yesterday=1" title="День назад"> << </a>
+                </dd>
+                <dd id="tomorrow" class="pagination">
+                  <a class="page nav {% if pagination['today']['has_next'] %}enabled{% else %}disabled{% endif %}" href="{{ pagination['link'] }}&tomorrow=1" title="День вперед"> >> </a>
+                </dd>
+                <dd id="today" class="pagination {% if pagination['today']['selected'] %}selected{% endif %}">
+                  <a class="page nav" href="{{ pagination['link'] }}&today=1" title="Журнал за текущий день"> Сегодня </a>
+                </dd>
+              </dl>
+              {% if pagination['today']['date_from'] %}
+              <div class="caption today date_from">{{ pagination['today']['date_from'] }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endif %}
+
+      </form>
+      </table>
+
+    </div>
+
+{%- endmacro %}
+
+{% macro commands(base) -%}
+
+  <div id="menu-commands">
+    <form action="{{ base }}" id="init-form" method="POST">
+      <input type="hidden" name="sidebar" value="">
+    </form>
+
+    <button class="btn btn-success" id="refresh">{{ _('Refresh') }}</button>
+    <button class="btn btn-warning" id="init-filter">{{ _('Clean & Reset query') }}</button>
+    <button class="btn btn-primary" id="export">{{ _('Export view data') }}</button>
+  </div>
+
+{%- endmacro %}
+
+{% macro search(root, search_context) -%}
+
+  <div class="block" id="search-box">
+    <form action="search" id="search-form" onSubmit="return false;">
+      <input class="string" id="search-context" type="text" value="{{ search_context }}" title="{{ g.maketext('Search by context') }}" placeholder="{{ g.maketext('Search context...') }}">
+      <img id="search-icon" src="{{ root }}static/img/db-search.png" title="{{ _('Search') }}" alt="">
+    </form>
+  </div>
+
+{%- endmacro %}

@@ -1,0 +1,116 @@
+﻿{% extends "common.html" %}
+
+{% import 'forms.html' as Forms %}
+
+{% block page_styles %}
+
+<link href="{{ url_for('static', filename='css/style') }}.main.css{{ vsc }}" rel="stylesheet" type="text/css">
+<link href="{{ url_for('static', filename='css/pikaday/pikaday.css') }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block starter %}
+
+<script src="{{ url_for('static', filename='js/db.controller.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/log.default.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/main.dialogs.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/main.min.js') }}{{ vsc }}"></script>
+
+<script src="{{ url_for('static', filename='js/main.default.min.js') }}{{ vsc }}"></script>
+
+<script src="{{ url_for('static', filename='js/pikaday.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/pikaday.jquery.min.js') }}"></script>
+
+{% endblock %}
+
+{% block header_styles %}
+
+<style type="text/css">
+
+#pageCaption { width:420px; }
+
+</style>
+
+{% endblock %}
+
+{% block data_section_content %}
+
+{% endblock %}
+
+{% block info_section_content %}
+
+  <div id="view-commands">
+    <form action="{{ base }}" id="command-form" method="post">
+
+      <input type="hidden" name="page" value="{{ pagination['current_page'] }}">
+      <input type="hidden" name="per-page" value="{{ pagination['per_page'] }}">
+      <input type="hidden" id="position" name="position" value="{{ pagination['position'] }}">
+      <input type="hidden" id="command" name="command" value="" />
+      <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+      <input type="hidden" name="sidebar" value="" />
+
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block pagination_title %}Заказов / карт{% endblock %}
+
+{% block pagination_form %}
+
+{% endblock %}
+
+{% block filter %}
+
+{% endblock %}
+
+{% block control_panel %}
+
+{% endblock %}
+
+{% block dialogs_content %}
+
+{% endblock %}
+
+
+{% block final_scripts %}
+
+<script type="text/javascript">
+/*
+var date = new Date();
+var now = date.getToday().split('-');
+
+alert(now);
+*/
+var $datepicker = $('#changedate').pikaday({
+  firstDay: 1,
+  bound: false,
+  //minDate: new Date(int(now[0]), int(now[1]), int(now[2])),
+  minDate: new Date(),
+  maxDate: new Date(2030, 12, 31),
+  yearRange: [2010,2030],
+  disableWeekends:true,
+  format: 'YYYY/M/D',
+  toString(date, format) {
+      // you should do formatting based on the passed format,
+      // but we will just return 'D/M/YYYY' for simplicity
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      return `${day}.${month}.${year}`;
+  },
+  parse(dateString, format) {
+      // dateString is the result of `toString` method
+      const parts = dateString.split('.');
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      return new Date(year, month, day);
+  },
+  onSelect: function (date) {}, //$BankpersoSubmitDialog.verified();
+  container: document.getElementById('changedate_box')
+});
+
+</script>
+
+{% endblock %}

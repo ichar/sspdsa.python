@@ -1,0 +1,163 @@
+{% import 'forms.html' as Forms %}
+
+{% block default_styles %}
+
+<style type="text/css">
+
+img.avatar { width:{{ avatar_width or '40' }}px; }
+
+</style>
+
+{% endblock %}
+
+{% block header_styles %}
+
+<style type="text/css">
+
+{%- if style['show_scroller'] and is_frame -%}
+
+::-webkit-scrollbar {
+    width:10px;
+}
+
+{%- endif -%}
+
+{%- if style['header'] -%}
+
+
+{%- endif -%}
+
+div.ground       { padding:20px 20px 10px 20px; }
+.noavatar        { padding-bottom:20px !important; }
+
+{%- if manual -%}
+
+div.navigation   { float:right; clear:both; }
+
+{%- endif -%}
+
+</style>
+
+{% endblock %}
+
+{% block top_header %}
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        {% if is_main %}
+            <a class="navbar-brand" href="{{ url_for('main.default_route') }}">{{ g.maketext('Application Main Name') }}</a>
+        {% else %}
+            <a class="navbar-brand" href="{{ url_for('center.start') }}">{{ g.maketext('Application Name') }}</a>
+        {% endif %}
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav"></ul>
+            <ul class="nav navbar-nav navbar-right">
+            {% if current_user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="{{ current_user.get_small_avatar(size=18) }}">
+                        {{ g.maketext('Maintenance') }}<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('configurator.start') }}">
+                            {{ g.maketext('Configurator') }}</a></li>
+                        <li><a href="{{ url_for('references.start') }}">
+                            {{ g.maketext('Application References') }}</a></li>
+                        <li><a href="{{ url_for('admlogviewer.start') }}">
+                            {{ g.maketext('Application Admin Logs') }}</a></li>
+                        <li><a href="{{ url_for('spologviewer.start') }}">
+                            {{ g.maketext('Application Special Logs') }}</a></li>
+                        <li><a href="{{ url_for('maintenance.start') }}">
+                            {{ g.maketext('Application Database Maintenance') }}</a></li>
+                    </ul>
+                </li>
+                {% if not is_mobile and is_superuser %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="{{ current_user.get_small_avatar(size=18) }}">
+                        {{ g.maketext('Account') }}<b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('admin.start') }}">{{ g.maketext('Application users') }}</a></li>
+                        <li><a href="{{ url_for('auth.register') }}">{{ g.maketext('Registration') }}</a></li>
+                        <li><a href="{{ url_for('auth.change_password') }}">{{ g.maketext('Change password') }}</a></li>
+                        <li><a href="{{ url_for('auth.profile', login=current_user.login) }}">
+                            {{ g.maketext('Profile') }}</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                <li class="current_user"><span>{{ current_user and current_user.login }}</span></li>
+                <li><a href="{{ url_for('auth.logout') }}">{{ g.maketext('Logout') }}</a></li>
+            {% else %}
+                <li class="login"><a href="{{ url_for('auth.login') }}">Вход</a></li>
+            {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block top_flash %}
+
+{% if show_flash %}
+
+<section id="flash-section">
+  
+  {% for message in get_flashed_messages() %}
+
+  {% if message %}
+    <div class="flash">{{ _(message) or message }}</div>
+  {%  endif %}
+
+  {% endfor %}
+  
+</section>
+
+{% endif %}
+
+{% endblock %}
+
+<div class="hidden" id="page_flash_section"></div>
+
+{% block mainmenu %}
+
+<header id="page-header">
+  <div id="header-content" class="{{ header_class }}">
+    <div class="page-header {{ header_subclass }}" id="pageCaption">{{ page_title }}</div>
+  
+  {%- if manual -%}
+  {%- endif -%}
+  
+  {%- if navigation -%}
+
+    {%- set noavatar = not avatar -%}
+
+    <div class="navigation">
+
+    {%- if current_user.is_authenticated -%}
+
+      <div class="mainmenu" id="mainmenu">
+
+      {{ Forms.form('navigation', 'home', navigation) }}
+
+      </div>
+
+    {%- endif -%}
+
+    </div>
+
+  {%- endif -%}
+
+  </div>
+</header>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+
+/*** Monopage Dialog Form Controls  ***/
+
+/*** IP-address control ***/
+
+.ip-address {
+    width: auto;
+    font-size: 1.2em;
+}
+
+.common-input * { display:inline-block; }
+.ip-address input.part { width:60px; text-align:center; }
+.point { font-weight:bold; }
+
+/*** Trigger Radio Button ***/
+
+.common-trigger * { display:inline-block; }
+.trigger { display:inline-block; overflow: hidden; }
+.trigger-item {
+    float: left;
+    display: inline-block;
+}
+.trigger-item input[type=radio] {
+    display: none;
+}
+.trigger-item label {
+    display: inline-block;
+    padding: 0px 15px;
+    line-height: 28px;
+    border: 1px solid #999;
+    border-right: none;
+    cursor: pointer;
+    user-select: none;   
+}
+.trigger .item-1 label {
+    border-radius: 6px 0 0 6px;
+}
+.trigger .item-2 label {
+    border-radius: 0 6px 6px 0;
+    border-right: 1px solid #999;
+}
+ 
+/* Checked */
+.trigger .item-1 input[type=radio]:checked + label {
+    background: #ffc5c5;
+}
+.trigger .item-2 input[type=radio]:checked + label {
+    background: #bbffbb;
+}
+
+/*** Slider Range Control ***/
+
+.slider input[type='range'] {
+    -webkit-appearance: auto;
+    background: #6ae;
+    height: 10px;
+    border-radius: 10px;
+}
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    background-color:#c0d4a8;
+    border:1px solid #0044888;
+    opacity:0.5;
+    height:10px;
+    width:10px;
+}
+
+.slider .control, .slider. value { display:inline-block !important; }
+
+.slider .control { width:130px; padding-top: 4px;  }
+.slider .labels { margin-top: 5px; }
+.slider .value { 
+    border: 1px solid #777;
+    padding: 4px 6px 4px 6px;;
+    margin-left: 10px;
+    float: right;
+    text-align: center;
+}
+
+.range-10 { width:48px; margin-left:7px; margin-right:10px; font:normal 11px Arial; }
+.range-box { border:1px solid silver; display:inline; padding:5px; color:gray; vertical-align:inherit; }
+.ral-box { 
+    display:inline-block; 
+    padding:8px; 
+    vertical-align:inherit; 
+    margin-left:10px; 
+}
+.ral-box span { 
+    font:normal 11px "Lucida Grande", Arial; 
+    text-align:center; 
+}
+
+.label-number { white-space:nowrap; }
+
+.white { border:1px solid #ffffff; color:white; }
+.black { border:1px solid #cccccc; color:#aaaaaa; }

@@ -1,0 +1,226 @@
+{% from 'templates.html' import render_field, render_select, render_combo, render_selected_combo %}
+
+{%- macro input(id, name, type, value, css, title, pattern, omitted, disabled, hidden) -%}
+
+  <div class="common-field common-input {% if hidden %}hidden{% endif %}" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <dd><input class="string" id="{{ id }}" name="{{ name }}" type="{{ type }}" 
+        {% if pattern %} pattern={{ pattern }}{% endif %} value="{{ value|safe }}" {{ disabled }}>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro number(id, name, type, value, css, title, omitted, disabled) -%}
+
+  <div class="common-field common-input" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <dd><input class="string" id="{{ id }}" name="{{ name }}" type="{{ type or 'number' }}" value="{{ value|safe }}" min="0" {{ disabled }}>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro button(id, name, css, title, disabled) -%}
+
+  <div class="common-field common-input" id="container_{{ id }}_button">
+    <button class="btn btn-primary {{ css }}" id="{{ id }}_button" name="{{ name }}" {{ disabled }}>{{ title }}</button>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro ip_address(id, name, type, value, css, title, pattern, omitted, disabled, hidden) -%}
+
+  <div class="common-field common-input {% if hidden %}hidden{% endif %}" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <div class="ip-address inline" id="{{ id }}" name="{{ name }}">
+      {%- set v=value and value.split('.') or ('','','','') -%}
+      <input class="part" type="number" id="{{ id }}_p1" min="1" max="255" value="{{ v[0]|safe }}" {{ disabled }}>
+      <span class="point">.</span>
+      <input class="part" type="number" id="{{ id }}_p2" min="0" max="255" value="{{ v[1]|safe }}" {{ disabled }}>
+      <span class="point">.</span>
+      <input class="part" type="number" id="{{ id }}_p3" min="0" max="255" value="{{ v[2]|safe }}" {{ disabled }}>
+      <span class="point">.</span>
+      <input class="part" type="number" id="{{ id }}_p4" min="0" max="255" value="{{ v[3]|safe }}" {{ disabled }}>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+    </div>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro port(id, name, type, value, css, title, pattern, omitted, disabled, hidden) -%}
+
+  <div class="common-field common-input {% if hidden %}hidden{% endif %}" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <dd><input class="port" id="{{ id }}" name="{{ name }}" type="number" min="52000" max="56000"
+        {% if pattern %} pattern={{ pattern }}{% endif %} value="{{ value|safe }}" {{ disabled }}>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro trigger(id, name, values, css, title, selected, disabled, hidden) -%}
+
+  <div class="common-field common-trigger {% if hidden %}hidden{% endif %}" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <div class="trigger">
+      <div class="trigger-item item-1">
+        <input type="radio" id="{{ id }}_1" name="{{ name }}" value="0" {% if value == 0 %}checked{% endif %}>
+        <label for="{{ id }}_1">{{ g.maketext('OFF') }}</label>
+      </div>
+      <div class="trigger-item item-2">
+        <input type="radio" id="{{ id }}_2" name="{{ name }}" value="1" {% if value == 1 %}checked{% endif %}>
+        <label for="{{ id }}_2">{{ g.maketext('ON') }}</label>
+      </div>
+    </div>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro slider(id, name, values, css, title, selected, disabled, hidden) -%}
+
+  <div class="common-field common-input {% if hidden %}hidden{% endif %}" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <div class="slider inline">
+      <div class="control">
+        <input type="range" id="{{ id }}" name="{{ name }}" min="{{ values[0] }}" max="{{ values[-1] }}" value="">
+        <div class="labels">
+          {% for n in values %}{{ n }}&nbsp;&nbsp;{% endfor %}
+        </div>
+      </div>
+      <div class="value" id="{{ id }}_value">0</div>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+    </div>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro date(id, name, type, value, css, title, omitted, disabled) -%}
+
+  <div class="common-field common-input" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <dd><input class="date" id="{{ id }}" name="{{ name }}" type="{{ type or 'date' }}" value="{{ value|safe }}" {{ disabled }}>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro checkbox(id, name, type, checked, css, title, omitted, disabled) -%}
+
+  <div class="common-field common-input" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <dd><input class="checkbox" id="{{ id }}" name="{{ name }}" type="{{ type or 'checkbox' }}" value="1" {% if checked %}checked{% endif %} {{ disabled }}>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro textarea(id, name, value, css, title, omitted, disabled, with_links, links_pages) -%}
+
+  <div class="common-field common-textarea" id="container_{{ id }}">
+  {% if title|length %}
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+  {% endif %}
+    <dd><textarea class="string" id="{{ id }}" name="{{ name }}" {{ disabled }}>{{ value|safe }}</textarea>
+  {% if omitted %}
+      <div class="common-mark">* {{ _('May be omitted') }}</div>
+  {% endif %}
+  {% if with_links %}
+      <div class="common-with-links" id="with-links-control:{{ id }}">
+        <span>{{ _('Add link to the document') }}:</span>
+        <div class="inline common-with-links-pages">
+          <select class="popup" id="with-links-pages:{{ id }}">
+    {%- for item in links_pages -%} 
+            <option value="{{ item[0] }}">{{ item[1] }}</option>
+    {%- endfor -%}
+          </select>
+        </div>
+        <input class="string" id="with-links-input:{{ id }}">
+        <button type="button" class="btn" id="with-links-button:{{ id }}">+</button>
+      </div>
+  {% endif %}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro select(id, name, values, css, title, disabled) -%}
+
+  <div class="common-field common-select" id="container_{{ id }}">
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <dd>
+      {{ render_select(id, name, values, disabled) }}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro combo(id, name, values, css, title, with_new, disabled, hidden, combo_title) -%}
+
+  <div class="common-field common-combo {% if hidden %}hidden{% endif %}" id="container_{{ id }}">
+    {% if title %}<dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>{% endif %}
+    <dd>
+      {{ render_combo(id, name, values, disabled, combo_title) }}
+    </dd>
+  {% if with_new %}
+    <div class="common-new-item">
+      <dt class="common-title"><span>==></span></dt>
+      <dd><input class="string" id="new_{{ id }}" name="new_{{ name }}" type="text" {{ disabled }}></dd><span class="common-mark">* {{ _('Extra') }}</span>
+    </div>
+  {% endif %}
+  </div>
+
+{%- endmacro -%}
+
+{%- macro selected_combo(id, name, values, css, title, selected, disabled, hidden, combo_title) -%}
+
+  <div class="common-field common-combo" id="container_{{ id }}">
+    {% if title %}<dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>{% endif %}
+    <dd>
+      {{ render_selected_combo(id, name, values, selected, disabled, combo_title) }}
+    </dd>
+  </div>
+
+{%- endmacro -%}
+
+{%- macro fileupload(id, name, type, title, css, button, disabled) -%}
+
+  <div class="common-field common-input {{ type }}" id="container_{{ id }}">
+  {% if title|length %}
+    <dt class="common-title"><div class="{{ css }}">{{ title|safe }}:</div></dt>
+    <dd>
+  {% endif %}
+    <input class="choosen" id="{{ id }}" name="{{ name }}" type="text" disabled="disabled">
+    <div class="fileUpload btn btn-{{ button[0] }}">
+        <span>{{ button[1] }}</span>
+        <input class="upload" type="file" id="{{ button[2] }}" name="file">
+    </div>
+  {% if title|length %}
+    </dd>
+  {% endif %}
+  </div>
+
+{%- endmacro -%}

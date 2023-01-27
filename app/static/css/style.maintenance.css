@@ -1,0 +1,4 @@
+
+body { overflow-y:inherit; }
+
+section { display:block !important; width:100%; }

@@ -1,0 +1,115 @@
+
+/*** ADMLOGGER ***/
+
+body { overflow-y:inherit; }
+
+#page-container > .admlogger { display:block; margin-right:12px; }
+
+.view-data thead th {
+    position: sticky; 
+    background:#38526F; 
+    color:white; 
+    padding:5px;
+    top: 0; 
+    z-index: 1;
+}
+
+div.admlogger .view-container { width:100%; }
+
+#line-content {
+    padding:0;
+    height:48vh;
+    overflow-y: auto; 
+}
+#line-table { 
+    border-spacing:5px; 
+    width:-webkit-fill-available;
+}
+
+
+div.admlogger td.np { width: 46px; }
+div.admlogger td.timestamp { max-width: 80px; width: 80px; }
+div.admlogger td.status { max-width: 140px; }
+div.admlogger td.uri { max-width: 240px; }
+div.admlogger td.mode { min-width: 100px; }
+div.admlogger td.login  { max-width: 120px; width: 100px; }
+div.admlogger td.message { width: 40%; }
+
+/*** Logger Filter Items  ***/
+
+div.admlogger-filter #type            { width:398px; }
+div.admlogger-filter #status          { width:max-content; }
+div.admlogger-filter #order-date-from { width:176px; }
+div.admlogger-filter #order-date-to   { width:176px; }
+div.admlogger-filter #state           { width:190px; }
+
+#line-table { border-spacing:5px; width:100%; }
+
+div.data-title {
+    color: #333;
+    clear: both;
+    text-align: end;
+    margin-right: 20px;
+    padding-bottom: 10px;
+    font-family: arial, "Lucida Grande";
+}
+div.data-title h2 { font-size: 1.3em; font-weight: 600; margin:0;  }
+
+#log-filter label.caption { font-size: 14px; color:white; }
+
+div.dates-list {
+    background-color:white;
+    width: 160px;
+    padding: 10px;
+    max-height: 244px;
+    overflow-y: auto;
+}
+
+div.dates-list ul { 
+    font-family: monospace;
+    margin: 0; 
+    padding: 0; 
+    font-size: 1.4em; 
+    color: #333; 
+}
+div.dates-list li.date_from { list-style-type:none; width: max-content; }
+div.dates-list li.date_from > a { color: #000000; }
+div.dates-list li.date_from, div.dates-list li.date_from > a { padding:3px 10px;}
+
+/*** Change Date Area ***/
+
+.changedate-context { height:250px; }
+
+#changedate_box { 
+    display:block; 
+    border:1px solid black; 
+    margin:10px auto;
+    width:260px;
+}
+/*
+.pika-single.is-hidden { display: block !important; }
+*/
+
+/*** Change Address Area ***/
+
+#changeaddress-context { width:540px; }
+
+div.changeaddress-item { margin-left:10px; }
+div.changeaddress-item dd, div.changeaddress-item dt { display:inline-block; } 
+div.changeaddress-item dt { width:140px; }
+div.changeaddress-item input { margin:0px; }
+
+/*** Media ***/
+
+@media screen and (min-width: 1900px) and (min-height: 1200px) {
+}
+
+@media screen and (max-width: 1600px) and (max-height: 900px) {
+    #line-content { height:390px; }
+}
+
+@media screen and (max-width: 1200px) and (max-height: 800px) {
+}
+
+@media screen and (max-width: 1280px) and (max-height: 2000px) and (max-device-width: 1280px) {
+}

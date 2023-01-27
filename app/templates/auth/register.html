@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% import 'forms.html' as Forms %}
+{% from 'templates.html' import render_login, render_password, render_email, render_role, render_input, render_submit %}
+
+{% block header_styles %}
+
+<style type="text/css">
+
+#html-container { text-align:center;  }
+
+section { float:none; }
+.middle-header { width:450px !important; }
+
+div.register_user {
+  text-align: left !important;
+}
+
+div.page-header {
+    width:40%;
+    margin:0px auto;
+}
+
+.role * { 
+    display:inline-block !important; 
+    text-align: left;
+}
+.role label { width:110px;  }
+
+</style>
+
+{% endblock %}
+
+{% block styles %}
+
+<link href="{{ url_for('static', filename='css/style') }}.login.css{{ vsc }}" rel="stylesheet" type="text/css">
+
+  {%- if is_explorer -%}
+
+<link href="{{ url_for('static', filename='css/style') }}.login.ie.css{{ vsc }}" rel="stylesheet" type="text/css">
+
+  {%- endif -%}
+
+{% endblock %}
+
+{% block starter %}
+
+<script src="{{ url_for('static', filename='js/login.min.js') }}{{ vsc }}"></script>
+
+<script type="text/javascript">
+
+IsNoDropdown = 0;
+
+</script>
+
+{% endblock %}
+
+{% block page_content %}
+
+<div class="register_user">
+
+    <form action="" method="post" class="form" role="form">
+    {{ form.hidden_tag() }}
+
+    {{ render_email(form.email) }}
+
+    {{ render_login(form.login) }}
+
+    {{ render_role(form.role) }}
+
+    {{ render_input(form.family_name) }}
+
+    {{ render_input(form.first_name) }}
+
+    {{ render_input(form.last_name) }}
+
+    {{ render_password(form.password, show_password) }}
+
+    {{ render_password(form.password2, show_password) }}
+
+    {{ render_submit(form.submit, 'Сохранить') }}
+
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block default_styles %}
+
+<link href="{{ url_for('static', filename='css/bootstrap-none.css') }}{{ vsc }}" rel="stylesheet" type="text/css">
+<link href="{{ url_for('static', filename='css/bootstrap-theme.css') }}{{ vsc }}" rel="stylesheet" type="text/css">
+<link href="{{ url_for('static', filename='css//style') }}.skins.css{{ vsc }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block styles %}
+
+{% block page_styles %}{% endblock %}
+
+<style type="text/css">
+
+{% if sidebar['state'] == 1 -%}
+
+#sidebar-navigator { background-image: url("/static/img/s72.png"); }
+#dataFrame { margin-left:422px; }
+
+{%- else -%}
+
+#sidebar-navigator { background-image: url("/static/img/s71.png"); background-position:center center; }
+#semaphore, #sidebar-content { display:none; }
+#dataFrame { margin-left:50px; }
+
+{%- endif %}
+
+#semaphore { margin:3px 12px 3px 0; }
+
+</style>
+
+{% endblock %}
+
+{% block sidebar_content %}
+
+<div id="sidebarBox">
+  <div id="sidebarFrame">
+
+    <div id="sidebar-semaphore">
+      <table border="0"><tr>
+        <td><div id="semaphore" class="semaphore-default-background">
+          {% for i in range(semaphore['count']) %}
+            <div class="semaphore-item semaphore-default-item" id="semaphore-{{ semaphore['ids'][i] }}" title="{{ _(semaphore['titles'][i]) }}"></div>
+          {% endfor %}
+        </div></td>
+        <td><div id="sidebar-navigator" title="{{ _('Click it to collapse&expand sidebar control') }}"></div></td>
+      </tr></table>
+    </div>
+
+    <div id="sidebar-content">
+    
+      <div id="menu">
+
+      {{ Forms.commands(base) }}
+
+      {{ Forms.search(root, search) }}
+
+      </div>
+
+      {% block control_panel %}{% endblock %}
+
+      {% block filter %}{% endblock %}
+
+    </div>
+  
+  </div>
+  
+  <div id="sidebarMobilePointer"></div>
+  <div id="sidebarPointer"><div class="sidebar-pointer"></div></div>
+</div>
+
+{% endblock %}
+
+{% block page_content %}
+
+<section id="data-section">
+
+  {% block data_section_title %}{% endblock %}
+
+  <div id="page-container">
+
+  {% block data_section_content %}{% endblock %}
+
+  {% block info_section_content %}{% endblock %}
+
+  </div>
+
+</section>
+
+<section id="footer-section">
+
+  {% block footer %}{% include 'default-footer.html' %}{% endblock %}
+
+</section>
+
+{% endblock %}

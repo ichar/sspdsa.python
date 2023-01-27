@@ -1,0 +1,439 @@
+﻿{% extends "common.html" %}
+
+{% import 'forms.html' as Forms %}
+{% import 'items.html' as Items %}
+
+{% block page_styles %}
+{% if is_astra %}
+<link href="{{ url_for('static', filename='css/style') }}.main-astra.css{{ vsc }}" rel="stylesheet" type="text/css">
+{% else %}
+<link href="{{ url_for('static', filename='css/style') }}.main.css{{ vsc }}" rel="stylesheet" type="text/css">
+{% endif %}
+
+{% endblock %}
+
+{% block starter %}
+
+<script src="{{ url_for('static', filename='js/db.controller.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/log.default.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/main.dialogs.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/main.min.js') }}{{ vsc }}"></script>
+
+<script src="{{ url_for('static', filename='js/main.default.min.js') }}{{ vsc }}"></script>
+
+<script type="text/javascript">
+
+var search_title = '{{ search_title }}'; //"Center Search context..."
+var diagram_forced_refresh_timeout = {{ diagram_forced_refresh_timeout }};
+
+</script> 
+
+{% endblock %}
+
+{% block header_styles %}
+
+<style type="text/css">
+
+#pageCaption { width:500px; }
+
+</style>
+
+{% endblock %}
+
+{% block data_section_title %}
+
+  <div class="data-title"><h2 id="page_datafilter_info">{{ data_title }}</h2></div>
+
+{% endblock %}
+
+{% block data_section_content %}
+
+  <div class="section-container">
+    <div class="container equipment black">
+      <div class="panel-top">
+        <div class="row_70 red" id="diagram">
+          <div class="green left" id="block_1">
+            <div class="box blue" id="item_0">
+              <div class="top-left-indent"><span class="item">0</span></div>
+              <div class="top-right-indent"><span class="item">ЦУП-Е</span></div>
+              <div class="item" id="item_0_box">
+                <table border="0">
+                <tr><td class="c1">
+                <div class="cboxcenter">
+                  <div class="cbox" id="item_01">
+                    <div class="nodeinline center" id="item_0_01">
+                      <div class="node bb x0" id="item_0_01_0"><span class="item">КТС 01</span></div>
+                      <div class="node bb x1" id="item_0_01_1"><span class="item">01</span></div>
+                    </div>  
+                  </div>
+                </div>
+                </td></tr></table>
+              </div>
+            </div>
+            <div class="box blue" id="item_1">
+              <div class="top-left-indent"><span class="item">1</span></div>
+              <div class="top-right-indent"><span class="item">T500</span></div>
+              <div class="item" id="item_1_box">
+                <table border="0">
+                <tr><td class="c2">
+                <div class="cboxbranch">
+                  <div class="cbox" id="item_11">
+                    <div class="nodeinline center" id="item_1_11">
+                      <div class="node bb x0" id="item_1_11_0"><span class="item">КТС 11</span></div>
+                      <div class="node bb x1" id="item_1_11_1"><span class="item">11</span></div>
+                    </div>  
+                  </div>
+                  <div class="cbox" id="item_12">
+                    <div class="nodeinline center" id="item_1_12">
+                      <div class="node bw x0" id="item_1_12_0"><span class="item">КТС 12</span></div>
+                      <div class="node bw x1" id="item_1_12_1"><span class="item">12</span></div>
+                    </div>  
+                  </div>
+                  <div class="cbox" id="item_13">
+                    <div class="nodeinline center" id="item_1_13">
+                      <div class="node bw x0" id="item_1_13_0"><span class="item">КТС 13</span></div>
+                      <div class="node bw x1" id="item_1_13_1"><span class="item">13</span></div>
+                    </div>
+                  </div>
+                </div>
+                </td><td class="c1">
+                <div class="cboxcenter">
+                  <div class="cbox" id="item_10">
+                    <div class="nodeinline center" id="item_1_10">
+                      <div class="node bb x0" id="item_1_10_0"><span class="item">КПТС-Ц</span></div>
+                      <div class="node bb x1" id="item_1_10_1"><span class="item">10</span></div>
+                    </div>
+                  </div>
+                </div>
+                </td></tr></table>
+              </div>
+            </div>
+            <div class="box blue" id="item_5">
+              <div class="top-left-indent"><span class="item">5</span></div>
+              <div class="top-right-indent"><span class="item">КЮС</span></div>
+              <div class="item" id="item_5_box">
+                <table border="0">
+                <tr><td class="c2">
+                  <div class="cboxbranch">
+                    <div class="cbox" id="item_51">
+                      <div class="nodeinline center" id="item_5_51">
+                        <div class="node bb x0" id="item_5_50_0"><span class="item">КТС-51</span></div>
+                        <div class="node bb x1" id="item_5_50_1"><span class="item">51</span></div>
+                      </div>  
+                    </div>
+                  </div>
+                </td><td class="c1">
+                  <div class="cboxcenter">
+                    <div class="cbox" id="item_50">
+                      <div class="nodeinline center" id="item_5_50">
+                        <div class="node bb x0" id="item_5_51_0"><span class="item">КПТС-О</span></div>
+                        <div class="node bb x1" id="item_5_51_1"><span class="item">50</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </td></tr></table>
+              </div>
+            </div>
+            <div class="line" id="line_0_01-1_10"></div>
+
+            <div class="line" id="line_1_11-1_10"></div>
+            <div class="line" id="line_1_12-1_10"></div>
+            <div class="line" id="line_1_13-1_10"></div>
+
+            <div class="line" id="line_1_10-5_50"></div>
+            <div class="line" id="line_5_51-5_50"></div>
+          </div>
+          <div class="green right" id="block_2">
+            <div class="box blue" id="item_2">
+              <div class="top-left-indent"><span class="item">2</span></div>
+              <div class="top-right-indent"><span class="item">1622</span></div>
+              <div class="item" id="item_2_box">
+                <table border="0">
+                <tr><td class="c1">
+                <div class="cboxcenter">
+                  <div class="cbox" id="item_20">
+                    <div class="nodeinline center" id="item_2_20">
+                      <div class="node bb x0" id="item_1_20_0"><span class="item">КПТС-O</span></div>
+                      <div class="node bb x1" id="item_1_20_1"><span class="item">20</span></div>
+                    </div>
+                  </div>
+                </div>
+                </td><td class="c2">
+                <div class="cboxbranch">
+                  <div class="cbox" id="item_21">
+                    <div class="nodeinline center" id="item_2_21">
+                      <div class="node bb x0" id="item_2_21_0"><span class="item">КТС 21</span></div>
+                      <div class="node bb x1" id="item_2_21_1"><span class="item">21</span></div>
+                    </div>  
+                  </div>
+                  <div class="cbox" id="item_22">
+                    <div class="nodeinline center" id="item_2_22">
+                      <div class="node bw x0" id="item_2_22_0"><span class="item">КТС 22</span></div>
+                      <div class="node bw x1" id="item_2_22_1"><span class="item">22</span></div>
+                    </div>  
+                  </div>
+                  <div class="cbox" id="item_23">
+                    <div class="nodeinline center" id="item_2_23">
+                      <div class="node bw x0" id="item_2_23_0"><span class="item">КТС 23</span></div>
+                      <div class="node bw x1" id="item_2_23_1"><span class="item">23</span></div>
+                    </div>
+                  </div>
+                </div>
+                </td></tr></table>
+              </div>
+            </div>
+            <div class="box blue" id="item_3">
+              <div class="top-left-indent"><span class="item">3</span></div>
+              <div class="top-right-indent"><span class="item">309</span></div>
+              <div class="item" id="item_3_box">
+                <table border="0">
+                <tr><td class="c1">
+                <div class="cboxcenter">
+                  <div class="cbox" id="item_30">
+                    <div class="nodeinline center" id="item_3_30">
+                      <div class="node bb x0" id="item_3_30_0"><span class="item">КПТС-O</span></div>
+                      <div class="node bb x1" id="item_3_30_1"><span class="item">30</span></div>
+                    </div>
+                  </div>
+                </div>
+                </td><td class="c2">
+                <div class="cboxbranch">
+                  <div class="cbox" id="item_31">
+                    <div class="nodeinline center" id="item_3_31">
+                      <div class="node bb x0" id="item_3_31_0"><span class="item">КТС 31</span></div>
+                      <div class="node bb x1" id="item_3_31_1"><span class="item">31</span></div>
+                    </div>  
+                  </div>
+                  <div class="cbox" id="item_32">
+                    <div class="nodeinline center" id="item_3_32">
+                      <div class="node bw x0" id="item_3_32_0"><span class="item">КТС 32</span></div>
+                      <div class="node bw x1" id="item_3_32_1"><span class="item">32</span></div>
+                    </div>  
+                  </div>
+                  <div class="cbox" id="item_33">
+                    <div class="nodeinline center" id="item_3_33">
+                      <div class="node bw x0" id="item_3_33_0"><span class="item">КТС 33</span></div>
+                      <div class="node bw x1" id="item_3_33_1"><span class="item">33</span></div>
+                    </div>
+                  </div>
+                </div>
+                </td></tr></table>
+              </div>
+            </div>
+            <div class="box blue" id="item_4">
+              <div class="top-left-indent"><span class="item">4</span></div>
+              <div class="top-right-indent"><span class="item">99</span></div>
+              <div class="item" id="item_4_box">
+                <table border="0">
+                <tr><td class="c2">
+                  <div class="cboxcenter">
+                    <div class="cbox" id="item_40">
+                      <div class="nodeinline center" id="item_4_40">
+                        <div class="node bb x0" id="item_4_40_0"><span class="item">КПТС-О</span></div>
+                        <div class="node bb x1" id="item_4_40_1"><span class="item">40</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </td><td class="c1">
+                <div class="cboxbranch">
+                  <div class="cbox" id="item_41">
+                    <div class="nodeinline center" id="item_4_41">
+                      <div class="node bb x0" id="item_4_41_0"><span class="item">КПТС-О</span></div>
+                      <div class="node bb x1" id="item_4_41_1"><span class="item">41</span></div>
+                    </div>  
+                  </div>
+                </td></tr></table>
+              </div>
+            </div>
+            <div class="line" id="line_2_20-2_21"></div>
+            <div class="line" id="line_2_20-2_22"></div>
+            <div class="line" id="line_2_20-2_23"></div>
+
+            <div class="line" id="line_3_30-3_31"></div>
+            <div class="line" id="line_3_30-3_32"></div>
+            <div class="line" id="line_3_30-3_33"></div>
+
+            <div class="line" id="line_4_40-4_41"></div>
+          </div>
+
+          <div class="line" id="line_1_10-2_20-1_2"></div>
+          <div class="line" id="line_1_10-3_30-1_2"></div>
+          <div class="line" id="line_1_10-4_40-1_2"></div>
+
+        </div>
+      </div>
+
+      <div class="panel-bottom row_20 red">
+        {%- set pagination = activities.pagination -%}
+        {%- set config = activities.config -%}
+        {%- set rows = activities.rows -%}
+        {%- set search = activities.search -%}
+        {%- set group = 'activities' -%}
+        {%- set mode = 'activities' -%}
+        <div class="col-50" id="unit_{{ group }}">
+          <div class="panel panel_default" id="{{ group }}">
+            <div class="panel_heading" id="{{ group }}_top">
+              <h3 class="panel_title">{{ g.maketext('Connection Activities Title') }}:</h3>
+            </div>
+            <div class="panel_body">
+              <div class="{{ group }}">
+
+                {{ Forms.tablines(group, rows, config) }}
+
+              </div>
+              <div class="view-bottom" id="{{ group }}_bottom">
+                <div class="paging">
+
+                  {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {%- set pagination = reliabilities.pagination -%}
+        {%- set config = reliabilities.config -%}
+        {%- set rows = reliabilities.rows -%}
+        {%- set search = reliabilities.search -%}
+        {%- set group = 'reliabilities' -%}
+        {%- set mode = 'reliabilities' -%}
+        <div class="col-50" id="unit_{{ group }}">
+          <div class="panel panel_default" id="{{ group }}">
+            <div class="panel_heading" id="{{ group }}_top">
+              <h3 class="panel_title">{{ g.maketext('Connection Reliabilities Title') }}:</h3>
+            </div>
+            <div class="panel_body">
+              <div class="{{ group }}">
+
+                {{ Forms.tablines(group, rows, config) }}
+
+              </div>
+              <div class="view-bottom" id="{{ group }}_bottom">
+                <div class="paging">
+
+                  {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nodeinfo" id="nodeinfo"><div class="content">
+      <div class="period-info">{{ g.maketext('Active Period [begin, finish]:') }} {{ period }}</div>
+    </div></div>
+    <div class="period" id="period"><div class="content"></div></div>
+
+    <div class="contextmenu" id="node_context_menu">
+      <div class="content">
+        <ul class="" id="{{ group }}-node_menu">
+          <li class="menu_item">
+            <a href="#" id="menu_{{ group }}_start_service" class="">{{ g.maketext('Start SPO exchange service') }}</a></li>
+          <li class="menu_item">
+            <a href="#" id="menu_{{ group }}_stop_service" class="">{{ g.maketext('Stop SPO exchange service') }}</a></li>
+          <li class="menu_item">
+            <a href="#" id="menu_{{ group }}_setup_main" class="">{{ g.maketext('Setup main service') }}</a></li>
+          <li class="menu_item">
+            <a href="#" id="menu_{{ group }}_setup_slave" class="">{{ g.maketext('Setup slave service') }}</a></li>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block info_section_content %}
+  <div id="view-commands">
+    <form action="{{ activities.base }}" id="command-form" method="post">
+
+      <input type="hidden" name="page" value="{{ activities.pagination['current_page'] }}">
+      <input type="hidden" name="per-page" value="{{ activities.pagination['per_page'] }}">
+      <input type="hidden" id="position" name="position" value="{{ activities.pagination['position'] }}">
+      <input type="hidden" name="selected_date" value="{{ args['selected_date'][1] }}">
+      <input type="hidden" name="division" value="{{ args['division'][1] }}" />
+      <input type="hidden" name="line" value="{{ args['line'][1] }}" />
+      <input type="hidden" id="command" name="command" value="" />
+      <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+      <input type="hidden" id="sidebar" name="sidebar" value="{{ sidebar['state'] }}">
+      <input type="hidden" id="searched" name="search" value="{{ search }}">
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block pagination_title %}Соединений{% endblock %}
+
+{% block pagination_form %}
+
+{% endblock %}
+
+{% block filter %}
+
+  <div id="log-filter" class="main-filter common-filter">
+    <div id="sidebar-filter-scroller">
+    <form action="{{ activities.pagination['action'] }}" id="filter-form" method="POST">
+    
+    <input type="hidden" name="page" value="{{ activities.pagination['current_page'] }}">
+    <input type="hidden" name="per-page" value="{{ activities.pagination['per_page'] }}">
+    <input type="hidden" id="reset_search" name="reset_search" value="0">
+    <input type="hidden" id="sort" name="sort" value="{{ activities.pagination['sort']['current_sort'] }}">
+    <input type="hidden" id="position" name="position" value="{{ activities.pagination['position'] }}">
+    <input type="hidden" id="sidebar" name="sidebar" value="{{ sidebar['state'] }}">
+    <input type="hidden" name="selected_date" value="{{ args['selected_date'][1] }}">
+    <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+    <input type="hidden" id="command" name="command" value="">
+    {% if 'extra' in activities.pagination %}<input type="hidden" name="__" value="1">{% endif %}
+
+    <dt><label class="caption date_from">{{ g.maketext('Activity dates') }}:</label></dt>
+    <div class="dates-list">
+      <ul>
+        <li class="selected_date {% if args['selected_date'][1] == '*' %}selected{% endif %}">
+          <a class="" 
+          href="{{ url_for('main.start', mode='equipment', selected_date='*', division=args['division'][1], line=args['line'][1]) }}"
+              >Все даты</a></li>
+        {% for date in dates %}
+          <li class="selected_date {% if args['selected_date'][1] == date[0] %}selected{% endif %}">
+            <a href="{{ url_for('main.start', mode='equipment', selected_date=date[0], division=args['division'][1], line=args['line'][1]) }}"
+              >{{ date[1] }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <dt><label class="caption division" id="division-caption">{{ g.maketext('Divisions') }}:</label></dt>
+    <dd>
+        <select class="field popup" id="division" name="division" onchange="javascript:MakeFilterSubmit(2);">
+          {% for division in divisions -%}
+            <option value="{{ division[0] }}" {% if args['division'][1] == division[0] %}selected{% endif %}>
+            {{ division[1] }}</option>
+          {%- endfor %}
+        </select>
+    </dd>
+
+    <dt><label class="caption direction" id="line-caption">{{ g.maketext('Line direction') }}:</label></dt>
+    <dd>
+        <select class="field popup" id="line" name="line" onchange="javascript:MakeFilterSubmit(3);">
+          {% for line in lines -%}
+            <option value="{{ line[0] }}" {% if args['line'][1] == line[0] %}selected{% endif %}>
+            {{ line[1] }}</option>
+          {%- endfor %}
+        </select>
+    </dd>
+
+    </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block control_panel %}
+
+{% endblock %}
+
+{% block dialogs_content %}
+
+{% endblock %}
+
+{% block final_scripts %}
+
+{% endblock %}

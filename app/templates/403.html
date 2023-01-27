@@ -1,0 +1,43 @@
+{% extends "simple.html" %}
+
+{% block title %}{{ g.make_text('Appliction Forbidden') }}]{% endblock %}
+
+{% block styles %}
+
+<style type="text/css">
+
+.page-header {
+    padding-bottom: 9px;
+    margin: 20px auto;
+    /* min-width: 100%; */
+    width: fit-content;
+    border-bottom: 1px solid #eeeeee;
+}
+
+</style>
+
+{% endblock %}
+
+{% block starter %}
+
+<script type="text/javascript">
+
+alert('W:'+$_width('screen-max')+':'+$_width('screen-min')+':'+$_width('max')+':'+$_width('min'));
+//alert('H:'+$_height('screen-max')+':'+$_height('screen-min')+':'+$_height('max')+':'+$_height('min')+':'+$_height('available'));
+
+</script> 
+
+{% endblock %}
+
+{% block page_content %}
+
+<div class="page-header">
+    <div class="error">
+    
+      {#<h1>{{ message }}</h1>#}
+      <img src="/static/img/403-error.png">
+
+    </div>
+</div>
+
+{% endblock %}

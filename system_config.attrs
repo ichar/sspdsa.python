@@ -1,0 +1,33 @@
+# -------------
+# ORION -SSPDSA
+# -------------
+
+# Print platform agent info
+IsLogAgent               :: 1
+# Use OFFSET in SQL-queries
+IsApplyOffset            :: 1
+# Forced Static Files loading
+IsForceRefresh           :: 1
+# Use Beep if forced refreshed
+IsWithBeep               :: 1
+#
+# ---------
+#
+# Close SPO-socket after command action is finished
+CloseSocketAfterActions  :: 0
+# Show successfull notifications on page
+ShowSuccessNotification	 :: 0
+# Update data for InActive Node
+UpdateParamsforInActive  :: 0
+# Update IP, ports values for Top Node(ID:0)
+UpdateIpPortsForNodeTop  :: 0
+# Hide configurator messages area
+ConfigMessagesHidden     :: 0
+# Hide Empty Nodes
+HideEmptyNodes           :: 1
+# Use reference divisions units [0|1]
+UseRefDivisionUnits      :: 0
+# Use reference lines units [0|1|2]
+UseRefLineUnits          :: 2
+# Use empty options for refers [EMPTY_REFERENCE_VALUE]
+UseRefEmptyValue         :: 0

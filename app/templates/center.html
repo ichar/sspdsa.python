@@ -1,0 +1,205 @@
+﻿{% extends "common.html" %}
+
+{% import 'forms.html' as Forms %}
+
+{% block page_styles %}
+
+<link href="{{ url_for('static', filename='css/style') }}.center.css{{ vsc }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block starter %}
+
+<script src="{{ url_for('static', filename='js/db.controller.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/log.default.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/center.dialogs.min.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/center.min.js') }}{{ vsc }}"></script>
+
+<script src="{{ url_for('static', filename='js/center.default.min.js') }}{{ vsc }}"></script>
+
+<script type="text/javascript">
+
+var search_title = '{{ search_title }}'; //"Center Search context..."
+var center_forced_refresh_timeout = 0;
+
+</script> 
+
+{% endblock %}
+
+{% block header_styles %}
+
+<style type="text/css">
+
+#pageCaption { width:420px; }
+
+</style>
+
+{% endblock %}
+
+{% block data_section_title %}
+
+  <div class="data-title"><h2 id="page_datafilter_info">{{ data_title }}</h2></div>
+
+{% endblock %}
+
+{% block data_section_content %}
+
+  <div class="center inline-content">
+    <div class="panel-top row_70 red" id="mainlines">
+
+      {{ Forms.lines(group, rows, config) }}
+
+      <form action="{{ pagination['link'] }}" id="pagination-form" method="GET" onSubmit="return $onPaginationFormSubmit(this);">
+        <input type="hidden" name="sidebar" value="" />
+        <input type="hidden" id="page" name="page" value="" />
+        <input type="hidden" name="date_from" value="{{ args['date_from'][1] }}" />
+        <input type="hidden" name="date_to" value="{{ args['date_to'][1] }}" />
+        <input type="hidden" id="selected_date" name="selected_date" value="{{ selected_date }}">
+        <input type="hidden" name="division" value="{{ args['division'][1] }}">
+        <input type="hidden" name="line" value="{{ args['line'][1] }}">
+        <input type="hidden" id="searched" name="search" value="{{ search }}">
+
+        {{ Forms.pagination(group, rows, pagination, 'Всего сообщений', 0, 1) }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block info_section_content %}
+
+    <div class="period" id="period"><div class="content">
+      <div class="period-info">{{ g.maketext('Active Period [begin, finish]:') }} {{ period }}</div>
+    </div></div>
+
+    <div class="panel-bottom row_20 red">
+      {%- set pagination = capacities.pagination -%}
+      {%- set config = capacities.config -%}
+      {%- set rows = capacities.rows -%}
+      {%- set search = capacities.search -%}
+      {%- set group = 'capacities' -%}
+      {%- set mode = 'capacities' -%}
+      <div class="col-50" id="unit_{{ group }}">
+        <div class="panel panel_default" id="{{ group }}">
+          <div class="panel_heading" id="{{ group }}_top">
+            <h3 class="panel_title">{{ g.maketext('Connection Capacities Title') }}:</h3>
+          </div>
+          <div class="panel_body">
+            <div class="{{ group }}">
+
+              {{ Forms.tablines(group, rows, config) }}
+
+            </div>
+            <div class="view-bottom" id="{{ group }}_bottom">
+              <div class="paging">
+
+                {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%- set pagination = speeds.pagination -%}
+      {%- set config = speeds.config -%}
+      {%- set rows = speeds.rows -%}
+      {%- set search = speeds.search -%}
+      {%- set group = 'speeds' -%}
+      {%- set mode = 'speeds' -%}
+      <div class="col-50" id="unit_{{ group }}">
+        <div class="panel panel_default" id="{{ group }}">
+          <div class="panel_heading" id="{{ group }}_top">
+            <h3 class="panel_title">{{ g.maketext('Connection Speeds Title') }}:</h3>
+          </div>
+          <div class="panel_body">
+            <div class="{{ group }}">
+
+              {{ Forms.tablines(group, rows, config) }}
+
+            </div>
+            <div class="view-bottom" id="{{ group }}_bottom">
+              <div class="paging">
+
+                {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block filter %}
+
+  <div id="log-filter" class="center-filter common-filter">
+    <div id="sidebar-filter-scroller">
+    <form action="{{ pagination['action'] }}" id="filter-form" method="POST">
+    {% set page=pagination['current_page'] %}
+    {% set per_page=pagination['per_page'] %}
+    <input type="hidden" name="page" value="{{ page }}">
+    <input type="hidden" name="per-page" value="{{ per_page }}">
+    <input type="hidden" id="reset_search" name="reset_search" value="0">
+    <input type="hidden" id="sort" name="sort" value="{{ pagination['sort']['current_sort'] }}">
+    <input type="hidden" id="position" name="position" value="{{ pagination['position'] }}">
+    <input type="hidden" id="sidebar" name="sidebar" value="{{ sidebar['state'] }}">
+    <input type="hidden" name="selected_date" value="{{ args['selected_date'][1] }}">
+    <input type="hidden" id="searched" name="search" value="{{ search }}">
+    <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+    <input type="hidden" id="command" name="command" value="">
+    {% if 'extra' in pagination %}<input type="hidden" name="__" value="1">{% endif %}
+
+    <dt><label class="caption date_from">{{ g.maketext('Exchange dates') }}:</label></dt>
+    <div class="dates-list">
+      <ul>
+        <li class="selected_date {% if args['selected_date'][1] == '*' %}selected{% endif %}">
+          <a class="" 
+          href="{{ url_for('center.start', selected_date='*', division=args['division'][1], line=args['line'][1],page=page,per_page=per_page) }}"
+              >Все даты</a></li>
+        {% for date in dates %}
+          <li class="selected_date {% if args['selected_date'][1] == date[0] %}selected{% endif %}">
+            <a href="{{ url_for('center.start', selected_date=date[0], division=args['division'][1], line=args['line'][1],page=page,per_page=per_page) }}"
+              >{{ date[1] }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {#
+    <dt><label class="caption division" id="division-caption">{{ g.maketext('Divisions') }}:</label></dt>
+    <dd>
+        <select class="field popup" id="division" name="division" onchange="javascript:MakeFilterSubmit(2);">
+          {% for division in divisions -%}
+            <option value="{{ division[0] }}" {% if args['division'][1] == division[0] %}selected{% endif %}>
+            {{ division[1] }}</option>
+          {%- endfor %}
+        </select>
+    </dd>
+  #}
+    <dt><label class="caption direction" id="line-caption">{{ g.maketext('Line direction') }}:</label></dt>
+    <dd>
+        <select class="field popup" id="line" name="line" onchange="javascript:MakeFilterSubmit(3);">
+          {% for line in lines -%}
+            <option value="{{ line[0] }}" {% if args['line'][1] == line[0] %}selected{% endif %}>
+            {{ line[1] }}</option>
+          {%- endfor %}
+        </select>
+    </dd>
+
+    </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block control_panel %}
+
+{% endblock %}
+
+{% block dialogs_content %}
+
+{% endblock %}
+
+{% block final_scripts %}
+
+{% endblock %}

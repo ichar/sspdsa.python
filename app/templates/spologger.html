@@ -1,0 +1,147 @@
+﻿{% extends "common.html" %}
+
+{% import 'forms.html' as Forms %}
+
+{% block header_styles %}
+
+<style type="text/css">
+
+div.page-header { width: 640px; }
+
+</style>
+
+{% endblock %}
+
+{% block page_styles %}
+
+<link href="{{ url_for('static', filename='css/style') }}.spologger.css{{ vsc }}" rel="stylesheet" type="text/css">
+<link href="{{ url_for('static', filename='css/pikaday/pikaday.css') }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block starter %}
+
+<script src="{{ url_for('static', filename='js/db.controller.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/log.default.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/spologger.dialogs.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/spologger.js') }}{{ vsc }}"></script>
+
+<script src="{{ url_for('static', filename='js/spologger.default.js') }}{{ vsc }}"></script>
+
+<script type="text/javascript">
+
+var search_title = '{{ search_title }}'; //"SpoLogger Search context..."
+var per_page = {{ pagination['per_page'] }};
+
+</script> 
+
+{% endblock %}
+
+{% block data_section_title %}
+
+  <div class="data-title"><h2>{{ data_title }}</h2></div>
+
+{% endblock %}
+
+{% block data_section_content %}
+
+  <div class="spologger inline-content">
+    <div class="panel_heading"><h3 class="panel_title">{{ g.maketext('Log Content') }}:</h3></div>
+      <div class="logger" id="line-content">
+      <div class="view-container" id="lines_container">
+        <div class="lines" id="lines_content">
+          {% for line in lines %}
+            <p>{{ line|safe }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  <div class="pagination">
+    <form action="{{ pagination['link'] }}" id="pagination-form" method="GET" onSubmit="return $onPaginationFormSubmit(this);">
+      <input type="hidden" name="sidebar" value="" />
+      <input type="hidden" id="page" name="page" value="" />
+      <input type="hidden" name="status" value="{{ args['status'][1] }}" />
+      <input type="hidden" name="user" value="{{ args['user'][1] }}" />
+      <input type="hidden" name="date_from" value="{{ args['date_from'][1] }}" />
+      <input type="hidden" name="date_to" value="{{ args['date_to'][1] }}" />
+      <input type="hidden" name="state" value="{{ args['state'][1] }}" />
+      <input type="hidden" id="selected_date" name="selected_date" value="{{ selected_date }}">
+      <input type="hidden" id="searched" name="search" value="{{ search }}">
+
+    {{ Forms.pagination(group, lines, pagination, 'Всего записей журнала', 0, 1) }}
+
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block info_section_content %}
+
+{% endblock %}
+
+{% block filter %}
+
+  <div id="log-filter" class="spologger-filter common-filter">
+    <div id="sidebar-filter-scroller">
+    <form action="{{ pagination['action'] }}" id="filter-form" method="POST">
+    
+    <input type="hidden" name="page" value="{{ pagination['current_page'] }}">
+    <input type="hidden" name="per-page" value="{{ pagination['per_page'] }}">
+    <input type="hidden" id="searched" name="search" value="{{ search }}">
+    <input type="hidden" id="reset_search" name="reset_search" value="0">
+    <input type="hidden" id="sort" name="sort" value="{{ pagination['sort']['current_sort'] }}">
+    <input type="hidden" id="position" name="position" value="{{ pagination['position'] }}">
+    <input type="hidden" id="sidebar" name="sidebar" value="{{ sidebar['state'] }}">
+    <input type="hidden" id="selected_date" name="selected_date" value="{{ selected_date }}">
+    <input type="hidden" id="errors" value="{{ errors }}">
+    <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+    <input type="hidden" id="command" name="command" value="">
+    {% if 'extra' in pagination %}<input type="hidden" name="__" value="1">{% endif %}
+
+    <dt><label class="caption date_from">Доступные журналы:</label></dt>
+    <div class="dates-list">
+      <ul>
+        <li class="date_from {% if selected_date == '*' %}selected{% endif %}">
+          <a class="" href="{{ url_for('spologviewer.start', selected_date='*', status=args['status'][1], user=args['user'][1]) }}">Все даты</a></li>
+        {% for date in dates %}
+          {%- set file = files[loop.index0] -%}
+          <li class="date_from {% if args['date_from'][1] == date or selected_date == date %}selected{% endif %}">
+            <a href="{{ url_for('spologviewer.start', date_from=date, status=args['status'][1], user=args['user'][1]) }}">{{ date }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <dt><label class="caption status" id="status-caption">Статус события:</label></dt>
+    <dd>
+        <select class="field popup" id="status" name="status" onchange="javascript:MakeFilterSubmit(2);">
+          {% for status in statuses -%}
+            <option value="{{ status[0] }}" {% if args['status'][1] == status[0] %}selected{% endif %}>
+            {{ status[2] }}</option>
+          {%- endfor %}
+        </select>
+    </dd>
+
+    <dt><label class="caption user" id="status-caption">Пользователь:</label></dt>
+    <dd>
+        <select class="field popup" id="" name="user" onchange="javascript:MakeFilterSubmit(3);">
+          {% for user in users -%}
+            <option value="{{ user }}" {% if args['user'][1] == user %}selected{% endif %}>
+            {{ user }}</option>
+          {%- endfor %}
+        </select>
+    </dd>
+
+    </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block control_panel %}
+
+{% endblock %}
+
+{% block dialogs_content %}
+
+{% endblock %}

@@ -1,0 +1,42 @@
+
+/*** Tab Paging  ***/
+
+.paging-pages {}
+.paging-today  { padding-top:10px; }
+
+.tab-paging { 
+    font-size:12px;
+    border:0px solid #cccccc; 
+    padding:8px 5px 8px 5px;
+    display:inline-block;
+    width:100%;
+}
+
+.tab-paging table { white-space:nowrap; }
+.tab-paging div.total_rows, .tab-paging div.today { font-weight:bold; margin-left:5px; margin-top:0px; }
+.tab-paging div.per_page { font-weight:bold; display:inline-block; }
+.tab-paging div.sortbox { font-weight:bold; display:inline-block; }
+.tab-paging span.total {}
+.tab-paging select.popup { margin:-3px 0 0 3px; }
+
+.total { padding:0 5px 0 5px; display:inline-block; }  /*width:80px !important;*/
+.today { padding:0; display:inline-block; }
+
+.tab-page { padding-left:0; margin-left:10px; }
+.tab-page dl { margin:0; padding:0; }
+.tab-page dt, .tab-page dd { display:inline-block; }
+.tab-page dt { margin:0; padding:0; }
+.tab-page dd.paging { margin:0; padding:0; }
+.tab-page dd.valid { border:1px solid #888888; border-radius:0px; padding:5px; margin-left:3px; cursor:pointer; }
+.tab-page dd.empty { margin:0 0 0 2px; }
+.tab-page dd.selected { background-color:#C8AACE; border:1px solid #aa0000; }
+.tab-page dd.shift { cursor:pointer; font-family:Verdana,Arial; font-size:10px; }
+.tab-page dd.spaced { margin:0 5px 0 7px; color:black; font:bold 12px Verdana,Arial; }
+.tab-page dd.auto {}
+.tab-page dd.prev {}
+.tab-page dd.next {} /* margin-left:8px; */
+.tab-page a { padding:0 7px 0 6px; } /* */
+.tab-page a.nav { font:normal 12px Verdana,Arial; }
+
+.tab-per-page, .tab-sortbox { display:inline-block; margin:2px 5px 0 8px; }
+

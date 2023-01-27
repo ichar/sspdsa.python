@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>tech16.xpm</file>
+        <file>refresh.png</file>
+        <file>All.png</file>
+        <file>No.png</file>
+        <file>Ok.png</file>
+        <file>tools.png</file>
+        <file>filenew_1.png</file>
+        <file>korganizer_todo.png</file>
+        <file>view-history.png</file>
+        <file>away-extended.png</file>
+        <file>asc.png</file>
+        <file>checked.png</file>
+        <file>desc.png</file>
+        <file>erase.png</file>
+        <file>gtk-refresh_2683.png</file>
+        <file>hlp.png</file>
+        <file>lrb.png</file>
+        <file>lrb32.png</file>
+        <file>prb.png</file>
+        <file>pzd16.png</file>
+        <file>technlgy.ico</file>
+        <file>unchecked.png</file>
+        <file>NoNo.png</file>
+    </qresource>
+</RCC>

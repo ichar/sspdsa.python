@@ -1,0 +1,142 @@
+
+/*** CONFIGURATOR ***/
+
+body { overflow-y:inherit; }
+
+#log-pagination { display:none; }
+
+#page-container > .configurator { display:block; margin-right:12px; width:100%; }
+
+div.container .view-container { width:100%; }
+
+div.configs {
+    display: block;
+}
+
+#tabline-configs { height:32vh; }
+#config-content { height:35.5vh; }
+.change { height:15.8vh; }
+
+div.container div.col-30 { display:inline-block; vertical-align: top; }
+div.col-30 .panel .panel_default .panel_heading {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+#line-table .header { background:#38526F; color:white; padding:10px; }
+
+div.config-row-counting { margin-top:10px; padding-left:10px; font-weight:bold; }
+
+#line-content {
+    height: 382px;
+    overflow-y: auto;
+}
+.configs td { font-size:1.1em; }
+
+div.col-30 {
+    width: 33%;
+    margin-right:0px;
+}
+div.col-30:last-child { margin-right: 0px;}
+
+.view-container  { border:0px solid #aaa; border-radius:0; padding:0; width:auto; }
+
+#tabline-configs { 
+    height:366px; 
+    overflow-y: auto;
+    border-spacing:2px;
+}
+
+#tabline-configs thead th {
+    position: sticky; 
+    background:#38526F; 
+    color:white; 
+    padding:5px;
+    top: 0; 
+    z-index: 1;    
+}
+
+.panel {}
+.panel_default {}
+
+.panel_heading { background-color: rgb(122 122 122 / 33%); }
+h3.panel_title {
+    margin:  0;
+    padding: 10px;
+}
+
+div.panel {
+    margin: 0;
+    margin-bottom:6px;
+}
+
+div.panel_body { padding: 10px; }
+
+#configs-paging { padding-top:5px;  }
+
+div.paging { border:0px solid black; }
+
+div.panel_body textarea {
+    width: -webkit-fill-available;
+    width: -moz-available;
+    height: 410px;
+    font-family: sans-serif, monospace, arial;
+    font-size: 1.2em;
+    overflow-y: auto;
+
+}
+
+div.messages {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #aaa;
+    font-size: 1.0em;
+    color: #88a;
+    height:280px;
+    overflow-y:auto;
+}
+
+div.panel_footer { 
+    background-color:#eee;
+    width: auto; 
+    overflow-y: initial; 
+}
+
+table.configs {
+    width: -webkit-fill-available;
+    width: -moz-available;
+}
+
+#config_form_buttons {
+    padding: 10px;
+    margin: 0;
+}
+
+div.change {
+    border: 1px solid #ccc;
+    overflow-y: auto;
+    height: 175px;
+    padding: 10px;
+}
+#changes_before p, #changes_after p {
+    padding: 0;
+    margin: 0;
+    font-size: 1.2em;
+}
+
+div.view-data-buttons button { display: inline-block; }
+
+/*** Media ***/
+
+@media screen and (min-width: 1900px) and (min-height: 1200px) {
+}
+
+@media screen and (max-width: 1600px) and (max-height: 900px) {
+}
+
+@media screen and (max-width: 1200px) and (max-height: 800px) {
+}
+
+@media screen and (max-width: 1280px) and (max-height: 2000px) and (max-device-width: 1280px) {
+}

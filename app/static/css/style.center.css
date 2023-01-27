@@ -1,0 +1,212 @@
+
+/*** CENTER ***/
+
+body { overflow-y:inherit; }
+
+#log-pagination { display:block; }
+
+#page-container > .center {
+    width:100%;
+}
+
+.view-container { }
+
+#tabline-capacities, #tabline-speeds { 
+    border-radius:0; 
+    background-color:white; 
+    padding-bottom:5px; 
+}
+#capacities-paging, #speeds-paging { margin-top:0px; }
+
+div.center  { 
+    display:block; 
+    padding:10px;
+    border:1px solid #aaa;
+    border-radius:12px;
+    margin-right:12px; 
+    width:100%;
+    margin:0;
+    margin-bottom:10px;
+}
+h2, h3 { color:#333; font:bold 1.1em arial, Tahoma, "Lucida Grande"; }
+h2 { font-size:1.2em; }
+h3 { font-size:1.3em; }
+
+
+div.container div.row_70 { display:inline-block; vertical-align: top; }
+div.row_70 .panel .panel_default .panel_heading {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+div.container div.row_20 { display:inline-block; vertical-align: top; padding:10px; }
+div.row_20 .panel .panel_default .panel_heading {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+div.panel-bottom div.col-50 { display:inline-block; vertical-align: top; }
+div.col-50 .panel .panel_default .panel_heading {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+
+div.col-50 {
+    margin-right: 5px;
+}
+
+#unit_capacities { width:56vw; }
+#unit_speeds { width:34vw; margin-left:10px; }
+
+#line-content {
+    padding:0;
+    overflow-y: auto; 
+}
+#line-content { height:40vh; }
+#line-table { 
+    border-spacing:5px; 
+    width:-webkit-fill-available;
+}
+
+#tabline-capacities {}
+
+#messages_row_counting {}
+
+div.messages {}
+
+.headers th.np { width: 54px; }
+.headers th.LINE { }
+.headers th.VOLUME {}
+.headers th.TIME {}
+.headers th.VALUE { width: 80px; }
+.headers th.ERRORS { text-align:center; }
+
+.headers th.BEFORE, .headers th.AFTER { min-width:80px; }
+.headers th.SENT, .headers th.RECEIVED { width:90px; }
+.headers th.DATER1, .headers th.DATER2 { width:60px; }
+
+
+ td.log-np, td.np { text-align:center; }
+ td.log-time { max-width: 80px; width: 80px; }
+ td.log-volume {}
+ td.log-line {}
+ td.log-value {}
+ td.log-errors { text-align:center; }
+
+tr.ERROR td.log-errors { background-color:#d44; color:white; font-weight:bold; }
+
+tr.TOTAL td.log-line {
+    color:#333;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.2em;
+}
+
+/*** Logger Filter Items  ***/
+
+.div.center-filter #type            { width:398px; }
+.div.center-filter #status          { width:max-content; }
+.div.center-filter #order-date-from { width:176px; }
+.div.center-filter #order-date-to   { width:176px; }
+.div.center-filter #state           { width:190px; }
+
+div.data-title {
+    color: #333;
+    text-align: end;
+    margin-right: 20px;
+    padding-bottom: 10px;
+    font-family: arial, "Lucida Grande";
+}
+div.data-title h2 { 
+    font-size: 1.3em; 
+    font-weight: 600; 
+    margin:0;  
+    color: #333;
+    text-align: end;
+    padding-bottom: 10px;
+    font-family: arial, "Lucida Grande";
+}
+
+#log-filter label.caption { font-size: 14px; color:white; }
+
+div.dates-list {
+    background-color:white;
+    width: 160px;
+    padding: 10px;
+    max-height: 244px;
+    overflow-y: auto;
+}
+
+div.dates-list ul { 
+    font-family: monospace;
+    margin: 0; 
+    padding: 0; 
+    font-size: 1.4em; 
+    color: #333; 
+}
+div.dates-list li.selected_date { list-style-type:none; width: max-content; }
+div.dates-list li.selected_date > a { color: #000000; }
+div.dates-list li.selected_date, div.dates-list li.selected_date > a { padding:3px 10px;}
+
+#capacities-container th.TOTAL { width:80px; }
+#capacities-container th VOLUME { width:120px; }
+
+#speeds-container th.VOLUME { width:120px; }
+#speeds-container th.ERRORS { width:60px; }
+
+/*** Active Period Box  ***/
+
+.period {
+    position: absolute;
+    display:none;
+    background-color: white;
+    font-size: 1.4em;
+    text-align: center;
+    width:auto;
+    min-width:570px;
+    vertical-align: middle;
+    padding:10px;
+    -webkit-box-shadow: 0px 3px 20px #14314F;
+    box-shadow: 0px 3px 20px #14314F;
+    z-index: 100;
+}
+.period p { margin:0; font-weight:bold; }
+
+.period .content {
+    border:1px solid #4e1a1a;
+    border-radius:8px;
+    padding:5px;
+    white-space:nowrap; 
+}
+
+.period-info { padding:10px; text-align:center; font-weight:bold; color:#882f2f; }
+
+/*** Media ***/
+
+@media screen and (min-width: 2100px) and (min-height: 1200px) {
+    div.center { height:1000px; }
+    #line-content { height:60vh; }
+    #line-table { width:-moz-available; }
+}
+
+@media screen and (min-width: 1900px) and (min-height: 1200px) {
+    div.center { max-height:600px; }
+    #line-content { height:60vh; }
+    #line-table { width:-moz-available; }
+}
+
+@media screen and (max-width: 1600px) and (max-height: 900px) {
+    div.center { max-height:800px; }
+    #line-content { height:60vh; }
+    #line-table { width:-moz-available; }
+}
+
+@media screen and (max-width: 1200px) and (max-height: 800px) {
+    #line-content { height:40vh; }
+}
+
+@media screen and (max-width: 1280px) and (max-height: 2000px) and (max-device-width: 1280px) {
+    #line-content { height:40 vh; }
+}

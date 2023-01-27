@@ -1,0 +1,413 @@
+﻿{% extends "common.html" %}
+
+{% import 'forms.html' as Forms %}
+{% import 'items.html' as Items %}
+
+{% block page_styles %}
+
+<link href="{{ url_for('static', filename='css/style') }}.references.css{{ vsc }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block starter %}
+
+<script src="{{ url_for('static', filename='js/db.controller.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/log.default.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/references.dialogs.js') }}{{ vsc }}"></script>
+<script src="{{ url_for('static', filename='js/references.js') }}{{ vsc }}"></script>
+
+<script src="{{ url_for('static', filename='js/references.default.js') }}{{ vsc }}"></script>
+
+<script type="text/javascript">
+
+is_full_container = {{ is_full_container }};
+is_no_line_open = {{ is_no_line_open }};
+
+</script> 
+
+{% endblock %}
+
+{% block header_styles %}
+
+<style type="text/css">
+
+#pageCaption { width:400px; }
+
+</style>
+
+{% endblock %}
+
+{% block data_section_title %}
+
+  {%- if data_title -%}
+    <div class="data-title"><h2>{{ data_title }}</h2></div>
+  {%- endif  -%}
+
+{% endblock %}
+
+{% block data_section_content %}
+
+  <div class="container references">
+    <div class="panel-top">
+      <div class="col-20">
+      {%- set pagination = division.pagination -%}
+      {%- set config = division.config -%}
+      {%- set rows = division.rows -%}
+      {%- set search = division.search -%}
+      {%- set group = 'divisions' -%}
+      {%- set mode = 'division' -%}
+        <div class="panel panel_default" id="{{ group }}">
+          <div class="panel_heading" id="{{ group }}_top">
+            <h3 class="panel_title">{{ g.maketext('Divisions Refer Title') }}:</h3>
+          </div>
+          <div class="panel_body">
+            <div class="{{ group }}">
+
+              {{ Forms.tablines(group, rows, config) }}
+
+            </div>
+            <div class="view-bottom" id="{{ group }}_bottom">
+              <div class="view-data-buttons" id="{{ group }}_refer_form_buttons"></div>
+              <div class="paging">
+
+                {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-70">
+      {%- set pagination = node.pagination -%}
+      {%- set config = node.config -%}
+      {%- set search = node.search -%}
+      {%- set rows = node.rows -%}
+      {%- set group = 'nodes' -%}
+      {%- set mode = 'node' -%}
+        <div class="panel panel_default" id="{{ group }}">
+          <div class="panel_heading" id="{{ group }}_top">
+            <h3 class="panel_title">{{ g.maketext('Nodes Refer Title') }}:</h3>
+          </div>
+          <div class="panel_body view-top">
+            <div class="{{ group }}">
+
+              {{ Forms.tablines(group, rows, config) }}
+
+            </div>
+            <div class="view-bottom" id="{{ group }}_bottom">
+              <div class="view-data-buttons" id="{{ group }}_refer_form_buttons">
+                  <button class="btn btn-primary disabled" id="action-{{ mode }}_change" disabled>
+                    {{ g.maketext('Change') }}
+                  </button>
+              </div>
+              <div class="paging">
+
+                {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-bottom">
+      {%- set pagination = messagetype.pagination -%}
+      {%- set config = messagetype.config -%}
+      {%- set search = messagetype.search -%}
+      {%- set rows = messagetype.rows -%}
+      {%- set group = 'messagetypes' -%}
+      {%- set mode = 'messagetype' -%}
+      <div class="col-20">
+        <div class="panel panel_default" id="{{ group }}">
+          <div class="panel_heading" id="{{ group }}_top">
+            <h3 class="panel_title">{{ g.maketext('MessageTypes Refer Title') }}:</h3>
+          </div>
+          <div class="panel_body view-top">
+            <div class="{{ group }}">
+
+              {{ Forms.tablines(group, rows, config) }}
+
+            </div>
+            <div class="view-bottom" id="{{ group }}_bottom">
+              <div class="view-data-buttons" id="{{ group }}_refer_form_buttons">
+                  <button class="btn btn-primary disabled" id="action-{{ mode }}_add" disabled>
+                    {{ g.maketext('Add') }}
+                  </button>
+                  <button class="btn btn-primary disabled" id="action-{{ mode }}_change" disabled>
+                    {{ g.maketext('Change') }}
+                  </button>
+              </div>
+              <div class="paging">
+
+                {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {%- set pagination = bind.pagination -%}
+      {%- set config = bind.config -%}
+      {%- set search = bind.search -%}
+      {%- set rows = bind.rows -%}
+      {%- set group = 'binds' -%}
+      {%- set mode = 'bind' -%}
+      <div class="col-70">
+        <div class="panel panel_default" id="{{ group }}">
+          <div class="panel_heading" id="{{ group }}_top">
+            <h3 class="panel_title">{{ g.maketext('Binds Refer Title') }}:</h3>
+          </div>
+          <div class="panel_body view-top">
+            <div class="{{ group }}">
+
+              {{ Forms.tablines(group, rows, config) }}
+
+            </div>
+            <div class="view-bottom" id="{{ group }}_bottom">
+              <div class="view-data-buttons" id="{{ group }}_refer_form_buttons">
+
+          {%  if is_main %}              
+
+                  <button class="btn btn-primary disabled" id="action-{{ mode }}_send" disabled>
+                    {{ g.maketext('Send') }}
+                  </button>
+
+          {% endif%}
+
+              </div>
+              <div class="paging">
+
+                {{ Forms.paging(group, pagination, search, sidebar, errors, 0, 0) }}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block info_section_content %}
+
+{% endblock %}
+
+{% block pagination_title %}{{ g.maketext('Total view records') }}{% endblock %}
+
+{% block pagination_form %}
+
+    <input type="hidden" id="page" name="page" value="" />
+    <input type="hidden" name="status" value="{{ bind.args['status'][1] }}" />
+    <input type="hidden" name="user" value="{{ bind.args['user'][1] }}" />
+    <input type="hidden" name="date_from" value="{{ bind.args['date_from'][1] }}" />
+    <input type="hidden" name="date_to" value="{{ bind.args['date_to'][1] }}" />
+    <input type="hidden" name="state" value="{{ bind.args['state'][1] }}" />
+    <input type="hidden" id="selected_date" name="selected_date" value="{{ bind.selected_date }}">
+    <input type="hidden" id="searched" name="search" value="{{ bind.search }}">
+
+{% endblock %}
+
+{% block filter %}
+
+  <div id="log-filter" class="admlogger-filter common-filter">
+    <div id="sidebar-filter-scroller">
+    <form action="{{ bind.pagination['action'] }}" id="filter-form" method="POST">
+    
+    <input type="hidden" name="page" value="{{ bind.pagination['current_page'] }}">
+    <input type="hidden" name="per-page" value="{{ bind.pagination['per_page'] }}">
+    <input type="hidden" id="searched" name="search" value="{{ bind.search }}">
+    <input type="hidden" id="reset_search" name="reset_search" value="0">
+    <input type="hidden" id="sort" name="sort" value="{{ bind.pagination['sort']['current_sort'] }}">
+    <input type="hidden" id="position" name="position" value="{{ bind.pagination['position'] }}">
+    <input type="hidden" id="sidebar" name="sidebar" value="{{ sidebar['state'] }}">
+    <input type="hidden" id="selected_date" name="selected_date" value="">
+    <input type="hidden" id="errors" value="{{ errors }}">
+    <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+    <input type="hidden" id="command" name="command" value="">
+    {% if 'extra' in bind.pagination %}<input type="hidden" name="__" value="1">{% endif %}
+
+    </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block control_panel %}
+
+{% endblock %}
+
+{% block dialogs_content %}
+
+<div class="check-error-container" id="check_error" style="display:none;">
+  <div class="error-box" id="check_error_box">
+    <div class="check_error_info" id="check_error_info"></div>
+  </div>
+  <div class="check-error-pointer"><div class="triangle-down"></div></div>
+</div>
+
+<div class="common-dialog" id="division-confirm-container" title="{{ g.maketext('Division Input Form') }}" style="display:none;">
+  <div class="common-confirmation">
+    <div class="common-box common-panel">
+      <div id="refer-box">
+        {%- set pagination = division.pagination -%}
+        {%- set config = division.config -%}
+        <form action="{{ pagination['link'] }}" class="common-form" id="division-form" method="POST">
+
+        </form>
+      </div>    
+    </div>
+  </div>
+</div>
+
+<div class="common-dialog" id="messagetype-confirm-container" title="{{ g.maketext('Message Type Input Form') }}" style="display:none;">
+  <div class="common-confirmation">
+    <div class="common-box common-panel">
+      <div id="messagetype-box">
+        {%- set pagination = messagetype.pagination -%}
+        {%- set config = messagetype.config -%}
+        <form action="{{ pagination['link'] }}" class="common-form" id="messagetype-form" method="POST">
+          <input type="hidden" id="refer_id" name="refer_id" value="">
+          <input type="hidden" name="page" value="{{ pagination['current_page'] }}">
+          <input type="hidden" name="per-page" value="{{ pagination['per_page'] }}">
+          <input type="hidden" id="refer_id" name="refer_id" value="">
+          <input type="hidden" name="position" value="{{ pagination['position'] }}">
+          <input type="hidden" name="sidebar" value="{{ sidebar['state'] }}">
+          <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+          <input type="hidden" id="command" name="command" value="">
+          <input type="hidden" id="window_scroll" name="window_scroll" value="">
+
+          <div class="refer-item common-next">
+
+            {{ Items.input('messagetype_id', 'messagetype_id', 'text', '', 'caption', 'Идентификатор', '', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.input('messagetype_name', 'messagetype_name', 'text', '', 'caption', 'Наименование', '', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.slider('messagetype_priority', 'messagetype_priority', messagetype.priorities, 'caption', 'Приоритет', 0) }}
+
+          </div>
+
+        </form>
+      </div>    
+    </div>
+  </div>
+</div>
+
+<div class="common-dialog" id="node-confirm-container" title="{{ g.maketext('Node Input Form') }}" style="display:none;">
+  <div class="common-confirmation">
+    <div class="common-box common-panel">
+      <div id="node-box">
+        {%- set pagination = node.pagination -%}
+        {%- set config = node.config -%}
+        <form action="{{ pagination['link'] }}" class="common-form" id="node-form" method="POST">
+          <input type="hidden" id="refer_id" name="refer_id" value="">
+          <input type="hidden" name="page" value="{{ pagination['current_page'] }}">
+          <input type="hidden" name="per-page" value="{{ pagination['per_page'] }}">
+          <input type="hidden" name="position" value="{{ pagination['position'] }}">
+          <input type="hidden" name="sidebar" value="{{ sidebar['state'] }}">
+          <input type="hidden" id="OK" name="OK" value="{{ OK }}">
+          <input type="hidden" id="command" name="command" value="">
+          <input type="hidden" id="window_scroll" name="window_scroll" value="">
+
+          <div class="refer-item common-next">
+
+            {{ Items.input('node_id', 'node_id', 'text', '', 'caption', 'Идентификатор', '', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.input('node_ndiv', 'node_ndiv', 'text', '', 'caption', '№ СЧ НСК', '', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.input('node_name', 'node_name', 'text', '', 'caption', 'Краткое наименование', '', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.input('node_fullname', 'node_fullname', 'text', '', 'caption', 'Полное наименование', '', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.ip_address('node_ip', 'node_ip', '', '', 'caption', 'IP-адрес', '', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.port('node_port1', 'node_port1', 'text', '', 'caption', 'Порт 1', '\d{4}', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.port('node_port2', 'node_port2', 'text', '', 'caption', 'Порт 2', '\d{4}', 0, '', 0) }}
+
+          </div>
+          <div class="refer-item common-next">
+
+            {{ Items.trigger('node_state', 'node_state', node.states, 'caption', 'В системе', 0) }}
+
+          </div>
+
+        </form>
+      </div>    
+    </div>
+  </div>
+</div>
+
+<div class="common-dialog" id="bind-confirm-container" title="{{ g.maketext('Bind Input Form') }}" style="display:none;">
+  <div class="common-confirmation">
+    <div class="common-box common-panel">
+      <div id="refer-box">
+        {%- set pagination = bind.pagination -%}
+        {%- set config = bind.config -%}
+        <form action="{{ pagination['link'] }}" class="common-form" id="bind-form" method="POST">
+
+          <div class="refer-bind-container">
+            <div class="refer-bind-info">
+              <p class="high">{{ g.maketext('Attention!') }}</p>
+              <p>{{ g.maketext('References bind confirmation note.') }}</p>
+              <p>{{ g.maketext('The current system references have been changedd and should be distributed to consumers for use.') }}</p>
+              <p>{{ g.maketext('Please, choose one of the following mode of distribution.') }}</p>
+            </div>
+            <div class="refer-buttons">
+              <div class="refer-item common-next">
+
+                {{ Items.button('send_refers_to_all', 'send_refers_to_all', 'refer-binds-signal', 
+                  g.maketext('Send reference to all clients'), 0) }}
+
+              </div>
+
+              <div class="refer-item common-next">
+
+                {{ Items.button('send_refers_to_current', 'send_refers_to_current', 'refer-binds-signal', 
+                  g.maketext('Send reference to current division only'), 0) }}
+
+              </div>
+
+              <div class="refer-item common-next">
+
+                {{ Items.button('change_refers', 'change_refers', 'refer-binds-signal', 
+                  g.maketext('Send change references signal'), 0) }}
+
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>    
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/buttons">
+        <file>DeleteBtn.png</file>
+        <file>RefreshBtn.png</file>
+        <file>InsertBtn.png</file>
+        <file>EditBtn.png</file>
+        <file>CancelBtn.png</file>
+        <file>PostBtn.png</file>
+        <file>PriorBtn.png</file>
+        <file>FirstBtn.png</file>
+        <file>LastBtn.png</file>
+        <file>NextBtn.png</file>
+        <file>DownBtn.png</file>
+    </qresource>
+</RCC>

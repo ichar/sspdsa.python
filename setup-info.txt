@@ -1,0 +1,908 @@
+------
+APACHE
+------
+sudo apt install apache2
+sudo systemctl start apache2
+sudo systemctl enable apache2
+
+php7.4 libapache2-mod-php7.4 openssl php-imagick php7.4-common php7.4-curl php7.4-gd php7.4-imap php7.4-intl php7.4-json php7.4-ldap php7.4-mbstring php7.4-pgsql php-ssh2 php7.4-xml php7.4-zip unzip
+
+Set /etc/apache2/apache2.conf:
+-----------------------------
+# These need to be set in /etc/apache2/envvars
+#User ${APPACHE_RUN_USER}
+#Group ${APACHE_RUN_GROUP}
+User www-data
+Group www-data
+
+Set /etc/apache2/envvars:
+------------------------
+# Since there is no sane way to get the parsed apache2 config in scripts, some
+# settings are defined via environment variables and then used in apache2ctl,
+# /etc/init.d/apache2, /etc/logrotate.d/apache2, etc.
+export APACHE_RUN_USER=www-data
+export APACHE_RUN_GROUP=www-data
+
+Check permissions to /var/www/html.
+sudo find . -type d -exec chmod 755 {} \;
+sudo find . -type f -exec chmod 644 {} \;
+
+sudo chown -R mkaro:www-data html/
+
+Activate sites conf:
+-------------------
+a2ensite 000-defaults.conf
+
+For PHP add script to var/www/html:
+----------------------------------
+sudo nano /var/www/html/info.php
+
+<?php
+echo phpinfo(); 
+?>
+
+Load Modules:
+------------
+-actions
++alias
+-asis
++authn_core
++authn_file
++authz_core
+-authz_groupfile
++authz_host
++autoindex
+-cgi
++dir
+-include
+--isapu
+--log_config
++mime
++negotiation
++rewrite
+-ssl
+
+
+Start/restart/reload Apache2:
+-----------------------------
+sudo systemctl restart apache2
+
+Check status:
+sudo systemctl status apache2
+
+----------
+uname -a
+echo "System: "`lsb_release -d --short` `uname -m` 
+
+df -h
+lsblk -a | -l
+fdisk -l
+
+
+----------------
+ASTRA LINUX REPO
+----------------
+
+Проверить контрольную сумму:
+astra-update -A -g -n образ_установочного_диска.iso образ_диска_обновления.iso
+gostsum -d <имя_образа>.
+
+root@astra:~# uname -a
+Linux astra 4.15.3-1-generic #astra13 SMP Wed Jul 25 16:37:04 UTC 2018 x86_64 GNU/Linux
+root@astra:~# echo "System: "`lsb_release -d --short` `uname -m`
+System: Astra Linux SE 1.6 (Smolensk) x86_64
+
+Скачать  iso, раскпаковать в /srv/repo, настроить локальные репозитории apt
+
+root@astra:/home/mkaro# sudo  cat /etc/apt/sources.list
+#deb cdrom:[OS Astra Linux 1.6 smolensk - amd64 DVD ]/ smolensk contrib main non-free
+# репозиторий основного диска
+deb file:/srv/repo/smolensk/main smolensk main contrib non-free
+# репозиторий диска со средствами разработки
+deb file:/srv/repo/smolensk/devel smolensk main contrib non-free
+# репозиторий диска с обновлением основного диска
+deb file:/srv/repo/smolensk/update smolensk main contrib non-free
+# репозиторий диска с обновлением диска со средствами разработки
+deb file:/srv/repo/smolensk/update-dev smolensk main contrib non-free
+
+sudo apt install astra-update
+/usr/sbin/astra-update
+
+Панель управления, система, Установка обновлений
+sudo apt install fly-astra-update
+/usr/bin/fly-astra-update
+
+-A: Установить обновление полностью автоматически, не задавая вопросов, выполняя автоматическое выключение и включение функций безопасности. Представляет собой последовательное выполнение действий:
+
+-d - Сохранить состояние функции безопасности, и отключить функции безопасности, мешающие обновлению. Состояние функций безопасности при этом будет сохранено в файле /etc/parsec/update-saveconf;
+
+-I - Установить обновление не интерактивно, не задавая вопросов;
+
+-e - Восстановить отключенные функции безопасности, мешавшие обновлению.
+
+-r: Установка обновления из репозиториев, перечисленных в файле /etc/apt/sources.list (без внесения изменений в сам файл).
+
+-n:	Только имитировать установку пакетов обновления.
+
+astra-update -A -r -n
+astra-update -A -r
+
+Лог сохранен в /var/log/astra_update_202210171055.log
+
+-----------
+REPO (lab50)
+-----------
+
+wget -qO - http://packages.lab50.net/lab50.asc | sudo apt-key add -
+sudo aptitude update && aptitude -y install lab50-archive-keyring
+sudo aptitude update && sudo aptitude -y install lab50-archive-keyring
+
+
+##https://wiki.astralinux.ru/pages/viewpage.action?pageId=158605540
+##https://wiki.astralinux.ru/pages/viewpage.action?pageId=3276859
+##https://forum.astralinux.ru/threads/2272/
+##http://packages.lab50.net/
+
+etc/apt/services.list:
+
+root@astra:/home/mkaro# sudo  cat /etc/apt/sources.list
+deb cdrom:[OS Astra Linux 1.6 smolensk - amd64 DVD ]/ smolensk contrib main non-free
+# Основной репозиторий (установочный диск)
+deb https://dl.astralinux.ru/astra/stable/1.6_x86-64/repository smolensk main contrib non-free
+
+# Актуальное оперативное обновление основного репозитория
+deb https://dl.astralinux.ru/astra/stable/1.6_x86-64/repository-update/ smolensk main contrib non-free
+
+# Диск со средствами разработки
+deb https://dl.astralinux.ru/astra/stable/1.6_x86-64/repository-dev/ smolensk main contrib non-free
+
+# Актуальное оперативное обновление диска со средствами разработки
+deb https://dl.astralinux.ru/astra/stable/1.6_x86-64/repository-dev-update/ smolensk main contrib non-free
+
+----------
+POSTGRESQL
+----------
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04-ru
+https://enterprise.arcgis.com/en/server/10.3/cloud/amazon/change-default-database-passwords-on-linux.htm
+
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+Start service (make it enable):
+sudo systemctl {start|stop|status|restart} postgresql.servicesudo systemctl enable postgresql.service
+
+Set `postgres` password:mkaro@asus:~$ sudo -u postgres psqlpostgres=# \password postgres
+Enter new password: 
+Enter it again: 
+postgres=# \q
+
+Install PgAdmin4:
+https://www.pgadmin.org/download/pgadmin-4-apt/
+check `curl` beforesudo apt install curl
+
+# Install the public key for the repository (if not done previously):sudo curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
+# Create the repository configuration file:sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+
+# Install for both desktop and web modes:sudo apt install pgadmin4# Install for desktop mode only:sudo apt install pgadmin4-desktop# Install for web mode only: sudo apt install pgadmin4-web # Configure the webserver, if you installed pgadmin4-web:sudo /usr/pgadmin4/bin/setup-web.sh
+Start PgAdmin4 from Show Applications and register sevrer `localhost` with `postgres` password.
+
+
+
+
+#Check localhost postgress permissions(trust):
+/etc/postgresql/9.6/main/pg_hba.conf
+
+local    all   postgres   trust
+
+#Set password for superuser
+sudo -i -u postgres
+psql:
+# \password
+
+>>> type password
+
+pgAdminLIII:
+connect localhost
+ad new Role for user (mkaro)
+
+Вход пользователя (PostgreSQL - пользователь без метки):
+https://forum.astralinux.ru/threads/1283/
+usermod -a -G shadow postgres
+setfacl -d -m u:postgres:r /etc/parsec/macdb
+setfacl -R -m u:postgres:r /etc/parsec/macdb
+setfacl -m u:postgres:rx /etc/parsec/macdb
+setfacl -d -m u:postgres:r /etc/parsec/capdb
+setfacl -R -m u:postgres:r /etc/parsec/capdb
+setfacl -m u:postgres:rx /etc/parsec/capdb
+
+/atc/parsec/mwitch.conf:
+ zero_if_notfound = yes
+
+
+Postgres update user password
+Change default PostgreSQL passwords
+
+Connect as ubuntu to the instance where PostgreSQL is installed. ...
+Switch to the root user. ...
+Log in to psql using the postgres database login role, connecting to the postgres database. ...
+Issue the \password command to alter the passwords of the three login roles. ...
+To exit psql, type \q.
+
+    
+$ vi /var/lib/pgsql/data/pg_hba.conf
+$ vi /etc/postgres/9.6/main/pg_hba.conf
+# Старая строка:
+local all postgres password
+# Изменяем на следующую строку:
+local all postgres trust
+
+Restore backup
+--------------
+sudo -i -u postgres
+cd <backup folder>
+createdb sspds
+psql
+# \l
+# \q
+
+$ psql sspds < orion.dmp
+
+# Check db by python
+# project venv activate
+
+python manage.py shell
+>>> db.create_all()
+>>> db.metadata.tables.keys()
+
+
+
+
+
+
+----
+SLIM
+----
+
+cd /storage/works/hexlet/slim/
+
+drwxrwxr-x  4 mkaro mkaro  4096 Sep 26 12:35  .
+drwxrwxr-x  3 mkaro mkaro  4096 Sep 26 17:20  ..
+drwxrwxr-x  4 mkaro mkaro  4096 Sep 26 14:28  public
+drwxrwxr-x 11 mkaro mkaro  4096 Sep 26 12:34  vendor
+-rw-rw-r--  1 mkaro mkaro   180 Sep 26 12:29  composer.json
+-rw-rw-r--  1 mkaro mkaro 40754 Sep 26 12:29  composer.lock
+-rw-r--r--  1 mkaro mkaro    56 Sep 26 12:20  Makefile
+-rw-r--r--  1 mkaro mkaro     0 Sep 26 12:28 '!root'
+
+composer require slim/slim slim/psr7 slim/http slim/php-view php-di/php-di
+make start
+
+cd /storage/works/hexlet/slim/public/
+
+drwxrwxr-x 4 mkaro mkaro 4096 Sep 26 14:28 .
+drwxrwxr-x 4 mkaro mkaro 4096 Sep 26 12:35 ..
+drwxrwxr-x 2 mkaro mkaro 4096 Sep 26 18:01 example
+drwxrwxr-x 8 mkaro mkaro 4096 Sep 26 18:03 .git
+-rw-rw-r-- 1 mkaro mkaro   41 Sep 27  2021 .gitignore
+-rw-r--r-- 1 mkaro mkaro 1272 Sep 26 18:22 index.php
+-rw-r--r-- 1 mkaro mkaro   76 Sep 26 14:02 README.md
+-rw-r--r-- 1 mkaro mkaro  253 Sep 26 17:46 users.php
+
+git init
+git add .
+$ git commit -m "init"
+$ git branch -M main
+
+Create repo in GitHub manully before!! hexlet-slim-example
+use just main branch !!
+
+$ git remote add origin https://github.com/ichar/hexlet-slim-example.git
+$ git push -u origin main
+
+----------
+GIT/GITHUB
+----------
+
+Update repository:
+
+$ git add .	
+$ git status
+$ git commit -m "info"
+$ git push -u origin main
+
+Add or Remove repository:
+
+$ git remote add origin https://github.com/ichar/hexlet-slim-example.git
+$ git rm -f --cached hexlet-slim-example
+
+sudo find . -type d -exec chmod 755 {} \;
+
+php -S localhost:8080
+
+sudo lsof -i :8080
+
+http://localhost:8080/
+
+
+|-public
+|- example
+|-templates
+|-vendor
+|-|-composer
+|-|-fig
+|-|-laravel
+|-|-nikic
+|-|-php-di
+|-|-psr
+|-|-ralouphie
+|-|-slim
+|-|-symfony
+|-|-autoload.php
+|-composer.json
+|-composer.lock
+|-Makefile
+
+
+class Post(models.Model):
+    """A blog post."""
+
+    title = models.CharField(max_length=200)
+    body = models.TextField(null=True)
+    published = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at =  models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+---------------------------------
+SYMFONY
+Setup Composer & Symfony for PHP7
+---------------------------------
+apache:
+https://symfony.com.ua/doc/current/setup/web_server_configuration.html
+
+symfony new my_project_name --version=5.4
+symfony new my_project_name --version=lts
+composer create-project symfony/skeleton:"^5.4" my_project_name
+
+
+cd /storage/www/apps/orion
+symfony check:requirements
+symfony new dbviewer --version=5.4 --full
+cd dbviewer
+php bin/console about
+php bin/console debug:router
+symfony server:start
+
+http://127.0.0.1:8000/
+
+https://symfony.com.ua/doc/current/quick_tour/the_big_picture.html
+
+Install Symfony 5.4
+
+
+curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
+sudo apt install symfony-cli
+composer require symfony/web-server-bundle --dev ^4.4.2
+composer create-project symfony/skeleton:"^5.4" quick_tour
+cd quick_tour/
+composer install
+composer require server --dev
+composer require annotations
+composer require symfony/flex
+composer require logger
+composer require --dev debug
+composer require twig
+composer require symfony/var-dumper
+composer require symfony/asset
+
+
+symfony check:requirements
+symfony check:security
+php bin/console about
+composer require symfony/orm-pack
+composer require --dev symfony/maker-bundle
+composer require --dev symfony/profiler-pack
+php bin/console doctrine:database:create
+
+symfony server:start
+
+php bin/console debug:router
+php bin/console debug:router <route name>
+php bin/console router:match /user/mkaro
+php bin/console list doctrine
+php bin/console doctrine:query:sql 'SELECT * FROM product
+
+composer require symfony/apache-pack
+
+bin/console cache:clear
+bin/console cache:pool:list
+bin/console cache:pool:clear cache.global_clearer
+bin/console cache:pool:clear cache.system_clearer
+bin/console cache:pool:clear cache.app_clearer
+
+---------------------
+PYTHON (DJANGO+FLASK)
+---------------------
+
+#http://packages.lab50.net/se16/dists/
+#http://packages.lab50.net/se16/pool/main/
+
+sudo apt -y install apt-transport-https ca-certificates lsb-release wget
+sudo wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+wget -qO - http://packages.lab50.net/lab50.asc | sudo apt-key add -
+sudo aptitude update && aptitude -y install lab50-archive-keyring
+sudo aptitude update && sudo aptitude -y install lab50-archive-key
+
+
+sudo apt-get install autoconf build-essential curl libtool libssl-dev libcurl4-openssl-dev libxml2-dev libreadline7 libreadline-dev libzip-dev libzip4 nginx openssl pkg-config zlib1g-dev libsqlite3-dev sqlite3 libonig-dev libpq-de
+sudo apt update && sudo apt upgrade
+apt list --upgradable
+sudo apt install python-pip python3-pip
+
+python3
+sudo apt -y install apt-transport-https ca-certificates lsb-release wget
+sudo apt update
+sudo apt-get install autoconf build-essential curl libtool libssl-dev libcurl4-openssl-dev libxml2-dev libreadline7 libreadline-dev libzip-dev libzip4 nginx openssl pkg-config zlib1g-dev libsqlite3-dev sqlite3 libonig-dev libpq-dev
+
+sudo apt-get install python3-venv
+sudo pip3 install virtualenv
+
+python3 -m venv venv
+sudo virtualenv venv
+
+#check permissions before (chowm, chmod)
+sudo find . -type d -exec chmod 755 {} \;
+sudo find . -type f -exec chmod 644 {} \;
+
+sudo chown -R mkaro:www-data html/
+
+cd venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+
+<venv> ....: python3
+>>> import flask
+>>> import requests
+>>. import django
+
+<venv> ....: deactivate
+
+--> .local/lib/python3.5/
+
+$!!
+pip install psycopg2-binary
+
+pip install django
+pip install flask
+...
+
+>>> import django
+>>> django.VERSION
+(2, 2, 28, 'final', 0)
+>>> import flask
+>>> flask.__version__
+'1.1.4'
+>>> import requests
+>>> requests.__version__
+'2.25.1'
+>>> 
+
+-----------
+APACHE-WSGI
+-----------
+#https://lab50.net/questions/question/apache-%D1%81-wsgi-%D0%BF%D0%BE%D0%B4-ald/
+#https://dunmaksim.blogspot.com/2018/10/django-modpython-astra-linux-se.html
+
+sudo apt-get install libapache2-mod-wsgi-py3 apache2-dev
+sudo pip3 install mod_wsgi
+
+#Замена концов строк
+sed -i 's/\r$//' *
+
+-----
+LINUX
+-----
+
+Archive files by tar:
+--------------------
+gzip test.txt
+gunzip test.txt
+
+# Create tar.gz:
+tar –cvzf documents.tar.gz ~/Documents
+
+x – instructs tar to extract the files from the zipped file
+v – means verbose, or to list out the files it’s extracting
+z – instructs tar to decompress the files – without this, you’d have a folder full of compressed files
+f – tells tar the filename you want it to work on
+
+>>> Extract.gz:
+tar –xvzf documents.tar.gz
+
+>>> Get Devices info:
+----_----------------
+ls -l /dev/
+lsblk -io KNAME,TYPE,SIZE,MODEL
+sudo df -h
+fdisk -l </dev/sda>
+
+>>> Astra console
+fly-term
+
+>>> Show processes
+ps ax
+ps -f
+
+>>> Sleep
+sudo s2disk | s2ram
+
+>>> Change end of lines and tabs everywhere:
+sed -i 's/\r//g' *.*
+find . -iname '*.*' -type f -exec sed -i.orig 's/\t/    /g' {} +
+
+>>> Move files with given mask to another folder (just one!! only, doesn't copy directory structure!!)
+find . -name '*.zip' -exec mv {} /path/to/single/target/directory/ \;
+
+>>> And remove all them...
+find . -name "*.bak" -type f -delete
+But use it with precaution. Run first:
+find . -name "*.bak" -type f -print0
+
+>>> Remove all
+rm -rf ./*.orig
+
+>> Find files in the folders recursively and print them
+find . -name '*.bak' -xtype f
+
+>>> To delete them, append an -exec with the trash command:
+find . -name '*.bak' -xtype f -exec trash {} +
+
+-----------------------
+Flask-SQLAlchemy (IDLE)
+-----------------------
+Start from venv:
+$ source venv/bin/activate
+$ /usr/bin/idle
+
+>>> import app
+>>> from app import db
+>>> db
+
+>>> db.MetaData
+>>> db.MetaData.__dict__
+>>> db.class_mapper
+>>> db.metadata
+>>> db.metadata.tables
+>>> db.metadata.tables.keys()
+dict_keys(['settings', 'subdivisions', 'privileges', 'users'])
+>>> users = db.metadata.tables['users']
+>>> print(users.columns)
+['users.id', 'users.reg_date', 'users.login', 'users.password_hash', 'users.nick', 'users.first_name', 'users.family_name', 'users.last_name', 'users.role', 'users.email', 'users.last_seen', 'users.last_visit', 'users.last_pwd_changed', 'users.confirmed', 'users.enabled', 'users.post']
+>>> users.indexes
+{Index('ix_users_reg_date', Column('reg_date', DateTime(), table=<users>)), Index('ix_users_login', Column('login', Unicode(length=20), table=<users>), unique=True), Index('ix_users_email', Column('email', String(length=120), table=<users>))}
+>>> users.constraints
+>>> users.foreign_keys
+>>> users.key
+'users'
+
+>>> User.all()
+>>> get_users()
+[]
+>>> print_users()
+
+>>> from app import models
+>>> from app.models import User
+>>> User
+>>> User.metadata
+>>> User.metadata.sorted_tables
+
+Show SQL in ORM execution
+>>> app.config['SQLALCHEMY_ECHO']=True
+
+#Flask app rules mapping:
+>>> for rule in app.url_map.iter_rules():
+...     if 'main' in rule.endpoint:
+...         print(rule)
+
+# --------------------- #
+
+>>>pip install bitstring
+
+bytes,bytesarray:
+
+from bitstring import BitArray
+bytes(0xf00x01)
+x=0xf001
+x1=b'\xf0\x01'
+bytearray(b'\xf1')
+
+b = bytearray(b'')
+b.append(0xf1)
+b.append(0x01)
+
+from bitstring import BitArray
+BitArray(b)
+c = BitArray(b'\xf1\x01')
+c
+c.bin
+
+# --------------------- #
+
+pip install python-dotenv
+
+https://stackoverflow.com/questions/52162882/set-flask-environment-to-development-mode-as-default
+https://flask.palletsprojects.com/en/2.2.x/patterns/lazyloading/
+    
+
+-----------------------------
+УСТАНОВКА И ЗАПУСК ПРИЛОЖЕНИЯ
+-----------------------------
+
+1. Установить интерпретатор Python 3.5, web-сервер Apache2, используя Менеджер пакетов Synaptic.
+
+2. Распаковать дистрибутив во временную папку:
+
+   2023015-setup.tar.gz (каталог дистрибутива приложения внутри дистрибутива - папка <sspdsa>)
+
+3. Выполнить типовую настройку web-сервера  с поддержкой python (инструкции выше):
+
+   /etc/apache2
+   
+   использовать файл настроек <sspdsa>/apache/apache2.conf
+   
+   Проверить группу пользователей ОС: APACHE_RUN_GROUP www-data
+
+3. Создать стартовый каталог приложения:
+
+    /var/www/html/apps/sspdsa
+
+4. Скопировать рабочие файлы приложения из каталога дистрибутива:
+
+    <sspdsa> -> /var/www/html/apps/sspdsa
+   
+5. Перейти в папку /var/www (полномочия root) и выполнить команды:
+
+# sudo find . -type d -exec chmod 755 {} \;
+# sudo find . -type f -exec chmod 644 {} \;
+
+# sudo chown -R root:www-data html/
+
+5. Добавить виртуальный сайт в конфигурацию apache2:
+
+   /etc/apache2/sites-available/sspdsa.conf
+
+   использовать файл настроек <sspdsa>/apache/sspdsa.conf
+
+6. Выполнить настройку конфигурационного файла приложения sspdsa/config.py для старта в конфигурации web-сервера:
+
+запрет терминальной печати:
+
+IsDebug                = 0  # sa[stdout]: prints general info (1 - forbidden with apache!)
+IsDeepDebug            = 0  # sa[stdout]: prints detailed info (1 - forbidden with apache!)
+
+рабочая локаль:
+
+default_system_locale  = 'ru_RU.UTF-8'
+
+адреса сервера:
+
+PUBLIC_URL = 'http://192.168.0.88:5000/'
+...
+DEFAULT_ROOT = {
+    'local'  : 'http://127.0.0.1:5000/',
+    'public' : '',
+}
+
+маршрут к главному файлу конфигурации СПО:
+
+CONFIG_PATH = '/var/www/html/apps/sspdsa/orion/kpts.cfg'
+
+Настроить параметры атрибутов приложения для доступа к СУБД по умолчанию:
+
+class ConnectionParams:
+(см по тексту)
+
+уточнить: host, database, user, password, scheme, nsch, nkts
+
+При старте параметры будут обновлены из конфигурационного файла СПО CONFIG_PATH.
+
+7. Проверить работоспособность приложения автономно:
+
+   - открыть терминал (Alt-T) без полномочий супервизора
+   - выполнить команды для проверки доступных модулей Python, фреймворка Flask, драйвера СУБД Postgreql:
+
+$ cd /var/www/html/apps/sspdsa
+$ python
+   
+    Python 3.5.3 (default, Nov  4 2021, 15:29:10) 
+    [GCC 6.3.0 20170516] on linux
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import flask
+    >>> flask.__version__
+    '1.1.4'
+    >>> import psycopg2
+    >>> psycopg2.__version__
+    '2.6.2 (dt dec pq3 ext lo64)'
+    
+    и другие по желанию
+
+    для выхода нажать Ctrl-Z
+
+   Активировать виртуальную среду приложения:
+    
+$ source venv/bin/activate
+   
+    (venv) >>> python manage.py shell
+
+   выполнить команды интерпретатора:
+
+>>> db
+<SQLAlchemy engine=postgresql+psycopg2://postgres:***@localhost/sspdsa?options=-csearch_path%3Dorion>
+>>> db.create_all()
+
+будут созданы дополнительные таблицы базы данных (система авторизации).
+
+>>> print_metadata()
+
+>>> 1. tvmax
+>>> 2. tslsb
+>>> 3. settings
+>>> 4. tvsd
+>>> 5. tsch
+>>> 6. ttsb
+>>> 7. tts
+>>> 8. tsb
+>>> 9. subdivisions
+>>> 10. tsnsi
+>>> 11. users
+>>> 12. privileges
+>>> 13. tuo
+>>> 14. tsd
+>>> 15. client_profile
+>>> 16. photo
+>>> 17. tcepsb
+>>> 18. ticfg
+
+>> print_routes()
+('/semaphore/loader', 'semaphore.loader')
+('/services/shutdown', 'maintenance.server_shutdown')
+('/services/loader', 'maintenance.loader')
+('/services/index', 'maintenance.start')
+('/admlogs/loader', 'admlogviewer.loader')
+('/spologs/loader', 'spologviewer.loader')
+('/admlogs/index', 'admlogviewer.start')
+('/spologs/index', 'spologviewer.start')
+('/config/loader', 'configurator.loader')
+('/refers/loader', 'references.loader')
+('/center/loader', 'center.loader')
+...
+список большой, всего 48 пунктов
+
+Для проверки доступа к базе данных можно выполнить одну из следующих команд:
+
+>>> Division.print_all()
+
+<Division n/a: isch:[ЦУП-Е] vch:[32103]>
+<Division 1: isch:[Т-500] vch:[54023]>
+<Division 2: isch:[1622] vch:[03770]>
+<Division 3: isch:[309] vch:[34608]>
+<Division 4: isch:[99] vch:[51428]>
+<Division 5: isch:[КЮС] vch:[КЮС]>
+>>> Node.print_all()
+<Node[tuo] pk:2 КПТС-Ц(КПТС-Ц) nsch:1 nkts:0 ip:[10.0.0.2] ports:[None-None] uruo:1 suo:[1] 2022-12-15 11:51>
+<Node[tuo] pk:1 ЦУП-Е(ЦУП-Е) nsch:0 nkts:1 ip:[10.0.0.2] ports:[52300-52301] uruo:2 suo:[2] 2022-12-12 12:30>
+<Node[tuo] pk:3 КТС11(КТС11) nsch:1 nkts:1 ip:[10.0.0.2] ports:[52303-52304] uruo:2 suo:[2] 2022-12-13 09:54>
+<Node[tuo] pk:4 КТС12(КТС12) nsch:1 nkts:2 ip:[None] ports:[None-None] uruo:2 suo:[0] >
+<Node[tuo] pk:5 КТС13(КТС13) nsch:1 nkts:3 ip:[None] ports:[None-None] uruo:2 suo:[0] >
+<Node[tuo] pk:6 КПТС-О(КПТС-О 2) nsch:2 nkts:0 ip:[10.0.0.3] ports:[52305-52306] uruo:2 suo:[1] 2023-01-11 09:29>
+<Node[tuo] pk:10 КПТС-О(КПТС-О 3) nsch:3 nkts:0 ip:[10.0.0.1] ports:[52309-52302] uruo:2 suo:[1] 2022-12-26 09:56>
+<Node[tuo] pk:14 КПТС-О(КПТС-О 4) nsch:4 nkts:0 ip:[10.0.0.4] ports:[52317-52318] uruo:2 suo:[2] >
+<Node[tuo] pk:16 КПТС-О(КПТС-О 5) nsch:5 nkts:0 ip:[None] ports:[None-None] uruo:2 suo:[0] >
+<Node[tuo] pk:7 КТС21(КТС21) nsch:2 nkts:1 ip:[10.0.0.3] ports:[52307-52308] uruo:3 suo:[2] >
+<Node[tuo] pk:8 КТС22(КТС22) nsch:2 nkts:2 ip:[None] ports:[None-None] uruo:3 suo:[0] >
+<Node[tuo] pk:9 КТС23(КТС23) nsch:2 nkts:3 ip:[None] ports:[None-None] uruo:3 suo:[0] >
+<Node[tuo] pk:11 КТС31(КТС31) nsch:3 nkts:1 ip:[10.0.0.4] ports:[52311-52312] uruo:3 suo:[2] >
+<Node[tuo] pk:12 КТС32(КТС32) nsch:3 nkts:2 ip:[10.0.0.206] ports:[52313-52314] uruo:3 suo:[2] >
+<Node[tuo] pk:13 КТС33(КТС33) nsch:3 nkts:3 ip:[10.0.0.204] ports:[52315-52316] uruo:3 suo:[2] >
+<Node[tuo] pk:15 КТС41(КТС41) nsch:4 nkts:1 ip:[None] ports:[None-None] uruo:3 suo:[0] >
+<Node[tuo] pk:17 КТС51(КТС51) nsch:5 nkts:1 ip:[None] ports:[None-None] uruo:3 suo:[0] >
+
+>>> MessageType.print_all()
+
+<Message[ttsb] pk:1 Запрос prior:[1]>
+<Message[ttsb] pk:2 Квитанция prior:[2]>
+<Message[ttsb] pk:3 КПИ prior:[3]>
+<Message[ttsb] pk:4 ТМИ prior:[1]>
+<Message[ttsb] pk:5 СП prior:[2]>
+
+а также любые другие для классов ORM SQLAlchemy: 
+
+определения пользовательских таблиц (файл sspdsa/app/models.py)
+описания классов внутри файла
+
+ConfigChange
+Division
+Line
+LineState
+Message
+Equipment
+Node
+Bind
+Speed
+Chain
+Signal
+
+успешное выполнение запросов свидетельствует о работоспособности интерфейса СУБД и приложения в целом.
+
+8. Однократно установить права на запуск:
+
+sudo chmod a+x run.sh
+
+9. Выполнить автономный старт:
+
+(venv) >>> .\run.sh
+
+(venv) mkaro@astra:/var/www/html/apps/sspdsa$ ./run.sh
+ * Serving Flask app "app" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 618-633-988
+
+10. Открыть браузер и проверить запуск приложения:
+
+    http://localhost:5000
+
+11. Если пользователь приложения ущкствует и авторизация пройдена будет выполнен редирект на главную страницу приложения (КПТС-Ц)
+
+    http://localhost:5000/equipment?mode=equipment
+
+12. Атономный запуск выполнен.
+
+13. Остановить приложение:
+
+    Ctrl-C
+    
+14. Запуск web-сервера:
+
+$ sudo systemctl start apache2
+$ sudo systemctl status apache2
+
+15. Проверить старт: http://localhost (It works).
+
+16. Проверить существование стартового файла подсистемы WSGI (интерфейс Apache-Python):
+
+    /usr/local/lib/python3.5/dist-packages/mod_wsgi/server/mod_wsgi-py35.cpython-35m-x86_64-linux-gnu.so
+    
+    При отсутствии распаковать и скопировать файлы:
+    
+    <spdsa>/lib/local.tar.gz -> /usr/local/lib/python3.5
+
+16. Добавить и активировать виртуальный хост приложения (порт 80):
+
+$ sudo systemctl stop apache2
+$ sudo a2disite 000-defaults.conf
+$ sudo a2ensite sspdsa.conf
+$ sudo systemctl start apache2
+
+или 
+
+$ sudo systemctl reload apache2
+
+17. Проверить работоспособность конфигурации:
+
+    http://localhost
+
+18. Журналы:
+
+    /varlog/apache2/error.log
+    
+    /varwww/html/apps/sspdsa/traceback.log
+
